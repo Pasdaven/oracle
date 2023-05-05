@@ -1,11 +1,13 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
+import { Oracle, Oracle__factory } from "../typechain-types";
 
 describe("Oracle", function () {
-  let oracle: any;
+  let Oracle: Oracle__factory;
+  let oracle: Oracle;
 
   beforeEach(async () => {
-    const Oracle = await ethers.getContractFactory("Oracle");
+    Oracle = await ethers.getContractFactory("Oracle");
     oracle = await Oracle.deploy();
     await oracle.deployed();
   });
@@ -18,7 +20,7 @@ describe("Oracle", function () {
         message: "Invalid data type",
       };
       const response = await oracle.checkDataType(data);
-      let result = {
+      const result = {
         status: response.status,
         message: response.message,
       };
@@ -30,18 +32,18 @@ describe("Oracle", function () {
       const stringData = { dataType: "String", content: "Hello world!" };
       const expectedResponse = { status: "valid", message: "Valid data type" };
       let response = await oracle.checkDataType(numericData);
-      let result = {
+      const numericResult = {
         status: response.status,
         message: response.message,
       };
-      expect(result).to.eql(expectedResponse);
+      expect(numericResult).to.eql(expectedResponse);
 
       response = await oracle.checkDataType(stringData);
-      result = {
+      const stringResult = {
         status: response.status,
         message: response.message,
       };
-      expect(result).to.eql(expectedResponse);
+      expect(stringResult).to.eql(expectedResponse);
     });
   });
 });
