@@ -12,6 +12,47 @@ describe("Oracle", function () {
     await oracle.deployed();
   });
 
+  describe("processRequest", function () {
+    it("should process a Numeric request", async () => {
+      const data = { dataType: "Numeric", content: "123" };
+      const expectedResponse = {
+        status: "success",
+        message: "Numeric function executed successfully",
+      };
+
+      await oracle.processRequest(data);
+      const result = await oracle.getResponses();
+      expect(result.status).to.equal(expectedResponse.status);
+      expect(result.message).to.equal(expectedResponse.message);
+    });
+
+    it("should process a String request", async () => {
+      const data = { dataType: "String", content: "Hello world!" };
+      const expectedResponse = {
+        status: "success",
+        message: "String function executed successfully",
+      };
+
+      await oracle.processRequest(data);
+      const result = await oracle.getResponses();
+      expect(result.status).to.equal(expectedResponse.status);
+      expect(result.message).to.equal(expectedResponse.message);
+    });
+
+    it("should return an error for an invalid data type", async () => {
+      const data = { dataType: "Boolean", content: "false" };
+      const expectedResponse = {
+        status: "invalid",
+        message: "Invalid data type",
+      };
+
+      await oracle.processRequest(data);
+      const result = await oracle.getResponses();
+      expect(result.status).to.equal(expectedResponse.status);
+      expect(result.message).to.equal(expectedResponse.message);
+    });
+  });
+
   describe("checkDataType", function () {
     it('should return "Invalid data type" for unsupported data types', async () => {
       const data = { dataType: "Boolean", content: "false" };
