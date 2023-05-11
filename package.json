@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "npx prettier --write .",
+        "format-check": "npx prettier --check .",
         "lint": "npx eslint . --ext .ts"
     },
     "keywords": [],
