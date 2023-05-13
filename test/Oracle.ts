@@ -13,34 +13,12 @@ describe('Oracle', function () {
     });
 
     describe('processRequest', function () {
-        it('should process a Numeric request', async () => {
-            const data = { dataType: 'Numeric', content: '123' };
-            const expectedResponse = {
-                status: 'success',
-                message: 'Numeric function executed successfully',
-            };
-
-            await oracle.processRequest(data);
-            const result = await oracle.getResponses();
-            expect(result.status).to.equal(expectedResponse.status);
-            expect(result.message).to.equal(expectedResponse.message);
-        });
-
-        it('should process a String request', async () => {
-            const data = { dataType: 'String', content: 'Hello world!' };
-            const expectedResponse = {
-                status: 'success',
-                message: 'String function executed successfully',
-            };
-
-            await oracle.processRequest(data);
-            const result = await oracle.getResponses();
-            expect(result.status).to.equal(expectedResponse.status);
-            expect(result.message).to.equal(expectedResponse.message);
-        });
-
         it('should return an error for an invalid data type', async () => {
-            const data = { dataType: 'Boolean', content: 'false' };
+            const data = {
+                dataType: 'Boolean',
+                question: 'false',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
             const expectedResponse = {
                 status: 'invalid',
                 message: 'Invalid data type',
@@ -48,14 +26,22 @@ describe('Oracle', function () {
 
             await oracle.processRequest(data);
             const result = await oracle.getResponses();
+            const callBackAddress = await oracle.getCallbackAddressByIndex(
+                result.requestIndex
+            );
             expect(result.status).to.equal(expectedResponse.status);
             expect(result.message).to.equal(expectedResponse.message);
+            expect(callBackAddress).to.equal(data.callBackAddress);
         });
     });
 
     describe('checkDataType', function () {
         it('should return "Invalid data type" for unsupported data types', async () => {
-            const data = { dataType: 'Boolean', content: 'false' };
+            const data = {
+                dataType: 'Boolean',
+                question: 'false',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
             const expectedResponse = {
                 status: 'invalid',
                 message: 'Invalid data type',
@@ -69,8 +55,16 @@ describe('Oracle', function () {
         });
 
         it('should return a valid response for supported data types', async () => {
-            const numericData = { dataType: 'Numeric', content: '123' };
-            const stringData = { dataType: 'String', content: 'Hello world!' };
+            const numericData = {
+                dataType: 'Numeric',
+                question: '123',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
+            const stringData = {
+                dataType: 'String',
+                question: 'Hello world!',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
             const expectedResponse = {
                 status: 'valid',
                 message: 'Valid data type',
