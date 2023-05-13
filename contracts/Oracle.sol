@@ -1,37 +1,35 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "./Numeric.sol";
-import "./String.sol";
-
 contract Oracle {
     struct Data {
         string dataType;
-        string content;
+        string question;
+        address callBackAddress;
     }
 
     struct Response {
         string status;
         string message;
+        uint256 requestIndex;
     }
 
     Response[] public responses;
+    mapping(uint256 => address) public requestIndexToAddress;
+    uint256 public requestIndexLength;
 
     function processRequest(Data memory requestData) public {
+        requestIndexToAddress[requestIndexLength] = requestData.callBackAddress;
+
         Response memory dataTypeCheck = checkDataType(requestData);
         Response memory response;
         if (keccak256(bytes(dataTypeCheck.status)) == keccak256(bytes("invalid"))) {
             response = dataTypeCheck;
-        }
-
-        if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
-            Numeric numericContract = new Numeric();
-            response = numericContract.numericFunction(requestData.content);
-        } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
-            String stringContract = new String();
-            response = stringContract.stringFunction(requestData.content);
+            response.requestIndex = requestIndexLength;
         }
         responses.push(response);
+
+        requestIndexLength++;
     }
 
     function checkDataType(Data memory _data) public pure returns (Response memory) {
@@ -41,14 +39,18 @@ contract Oracle {
         bytes memory dataTypeBytes = bytes(_data.dataType);
 
         if (keccak256(dataTypeBytes) != keccak256(numericType) && keccak256(dataTypeBytes) != keccak256(stringType)) {
-            return Response("invalid", "Invalid data type");
+            return Response("invalid", "Invalid data type", 0);
         }
 
-        return Response("valid", "Valid data type");
+        return Response("valid", "Valid data type", 0);
     }
 
     function getResponses() public view returns (Response memory) {
         uint256 length = responses.length;
         return responses[length - 1];
+    }
+
+    function getCallbackAddressByIndex(uint256 _index) public view returns (address) {
+        return requestIndexToAddress[_index];
     }
 }
