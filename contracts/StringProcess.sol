@@ -26,7 +26,12 @@ contract StringProcess {
 
     function createEvent(uint256 _questionId, string memory _question) public {
         require(!questions[_questionId].isExists, "Question already exists");
-        questions[_questionId] = Question(_questionId, _question, new address[](0), true);
+        
+        Question storage question = questions[_questionId];
+        question.questionId = _questionId;
+        question.question = _question;
+        question.isExists = true;
+
         emit NewStringQuestion(_questionId, _question, address(this));
     }
 
@@ -41,19 +46,20 @@ contract StringProcess {
             }
         }
         if (!_alreadyAnswered) {
-            questions[questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(msg.sender);
         }
     }
 
-    function getAnswerByAnswerer(uint256 questionId, address answerer) public view returns (string memory) {
-        return questions[questionId].answers[answerer];
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) public view returns (string memory) {
+        return questions[_questionId].answers[answerer];
     }
 
-    function getAllAnswerers(uint256 questionId) public view returns (address[] memory) {
-        return questions[questionId].answerers;
+    function getAllAnswerers(uint256 _questionId) public view returns (address[] memory) {
+        return questions[_questionId].answerers;
     }
 
-     function callStringIntegrationContract() public {
+    function callStringIntegrationContract() public {
+        // bytes memory data = abi.encodePacked(stringIntegrationContractABI);
         (bool success, bytes memory result) = stringIntegrationContractAddr.call(stringIntegrationContractABI);
         require(success, "String integration function call failed");
     }
