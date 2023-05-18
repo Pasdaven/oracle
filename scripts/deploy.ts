@@ -1,22 +1,30 @@
 import { ethers } from 'hardhat';
+// import { Contract } from 'hardhat/internal/hardhat-network/stack-traces/model';
 
 async function main() {
-    const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-    const unlockTime = currentTimestampInSeconds + 60;
 
-    const lockedAmount = ethers.utils.parseEther('0.001');
+    const numericIntegration = await deployContract('NumericIntegration');
+    const stringIntegration = await deployContract('StringIntegration');
 
-    const Lock = await ethers.getContractFactory('Lock');
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    const numericProcess = await deployContract('NumericProcess', numericIntegration);
+    const stringProcess = await deployContract('StringProcess', stringIntegration);
 
-    await lock.deployed();
+    const oracle = await deployContract('Oracle', numericProcess, stringProcess);
 
-    console.log(
-        `Lock with ${ethers.utils.formatEther(
-            lockedAmount
-        )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-    );
 }
+
+async function deployContract(contractName: string, ...constructorContract: Contract[]): Promise<Contract> {
+    const ContractFactory = await ethers.getContractFactory(contractName);
+    let contract;
+    if (!constructorContract.length) {
+        contract = await ContractFactory.deploy();
+    } else {
+        contract = await ContractFactory.deploy();
+    }
+    await contract.deployed();
+    return contract;
+}
+
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
