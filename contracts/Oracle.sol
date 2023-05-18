@@ -53,4 +53,13 @@ contract Oracle {
     function getCallbackAddressByIndex(uint256 _index) public view returns (address) {
         return requestIndexToAddress[_index];
     }
+
+    event ResponseEvent(bool success, bytes data); 
+    function sendAnswerToDApp(uint256 index,string memory answer) public payable { 
+        address _callbackAddress = getCallbackAddressByIndex(index); 
+        (bool success, bytes memory data) = _callbackAddress.call{answer: answer.value}( 
+            abi.encodeWithSignature("receiveAnswer(string)",answer.value) 
+        ); 
+        emit ResponseEvent(success, data);
+    }
 }
