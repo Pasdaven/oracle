@@ -19,7 +19,7 @@ contract StringProcess {
     bytes public stringIntegrationContractABI;
     address public stringIntegrationContractAddr;
 
-    constructor(string memory _abi, address _addr) {
+    constructor(bytes memory _abi, address _addr) {
         stringIntegrationContractABI = _abi;
         stringIntegrationContractAddr = _addr;
     }

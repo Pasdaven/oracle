@@ -19,7 +19,7 @@ contract NumericProcess {
     bytes public numericIntegrationContractABI;
     address public numericIntegrationContractAddr;
 
-    constructor(string memory _abi, address _addr) {
+    constructor(bytes memory _abi, address _addr) {
         numericIntegrationContractABI = _abi;
         numericIntegrationContractAddr = _addr;
     }
