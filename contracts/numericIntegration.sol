@@ -5,4 +5,8 @@ import "hardhat/console.sol";
 
 contract NumericIntegration {
 
+    function test() external view returns (uint256) {
+        console.log("test");
+        return 123;
+    }
 }
