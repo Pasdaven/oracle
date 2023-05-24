@@ -1,16 +1,19 @@
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import LatestAddress from '../../artifacts/contracts/LatestAddress.sol/LatestAddress.json';
+import Oracle from '../../artifacts/contracts/Oracle.sol/Oracle.json';
 import { useState } from 'react';
 
 const web3 = new Web3('http://localhost:8545');
 
-const LatestAddressABI = LatestAddress.abi;
-const contractAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
-const latestAddress = new web3.eth.Contract(
-    LatestAddressABI as AbiItem[],
-    contractAddress
-);
+const OracleABI = Oracle.abi;
+const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const oracle = new web3.eth.Contract(OracleABI as AbiItem[], contractAddress);
+
+type requestData = {
+    dataType: string;
+    question: string;
+    callBackAddress: string;
+};
 
 const App = () => {
     const [questionType, setQuestionType] = useState<string>('numeric');
@@ -20,17 +23,22 @@ const App = () => {
         setQuestionType(e.target.value);
     };
 
-    const getLatestAddress = async () => {
-        const address = await latestAddress.methods.getLatestAddress().call();
-        return address;
+    const data: requestData = {
+        dataType: questionType,
+        question: 'What is the price of ETH?',
+        callBackAddress: '0x70997970c51812dc3a010c7d01b50e0d17dc79c8',
+    };
+
+    const sendRequest = async () => {
+        const request = await oracle.methods.processRequest(data).call();
+        return request;
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setOracleAddress(await getLatestAddress());
+        await sendRequest();
     };
 
-    getLatestAddress();
     return (
         <div className="bg-slate-50 h-screen w-screen items-center justify-center flex">
             <div className="gap-6 flex flex-col w-1/2">
