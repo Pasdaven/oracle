@@ -1,4 +1,4 @@
-name: ES Lint
+name: Prettier
 
 on:
     push:
@@ -18,4 +18,4 @@ jobs:
                   node-version: '16.13.2'
                   cache: 'npm'
             - run: npm ci
-            - run: npm run lint
+            - run: npm run format-check
