@@ -1,23 +1,40 @@
-import { ethers, artifacts } from 'hardhat';
-import { Contract, ContractFactory, ethers as e } from 'ethers';
-
-
+import { ethers } from 'hardhat';
+import { Contract, ContractFactory } from 'ethers';
 
 async function main() {
-    
-    const numericIntegration = await deployContract('contracts/NumericIntegration.sol:NumericIntegration');
-    const stringIntegration = await deployContract('contracts/StringIntegration.sol:StringIntegration');
+    const numericIntegration = await deployContract(
+        'contracts/NumericIntegration.sol:NumericIntegration'
+    );
+    const stringIntegration = await deployContract(
+        'contracts/StringIntegration.sol:StringIntegration'
+    );
 
-    const numericProcess = await deployContract('contracts/NumericProcess.sol:NumericProcess', numericIntegration);
-    const stringProcess = await deployContract('contracts/StringProcess.sol:StringProcess', stringIntegration);
+    const numericProcess = await deployContract(
+        'contracts/NumericProcess.sol:NumericProcess',
+        numericIntegration
+    );
+    const stringProcess = await deployContract(
+        'contracts/StringProcess.sol:StringProcess',
+        stringIntegration
+    );
 
-    const oracle = await deployContract('contracts/Oracle.sol:Oracle', numericProcess, stringProcess);
+    const oracle = await deployContract(
+        'contracts/Oracle.sol:Oracle',
+        numericProcess,
+        stringProcess
+    );
+    console.log('Oracle deployed to:', oracle.address);
 }
 
-async function deployContract(contractName: string, ...contractArr: Contract[]): Promise<Contract> {
-    const ContractFactory: ContractFactory = await ethers.getContractFactory(contractName);
+async function deployContract(
+    contractName: string,
+    ...contractArr: Contract[]
+): Promise<Contract> {
+    const ContractFactory: ContractFactory = await ethers.getContractFactory(
+        contractName
+    );
     let contract: Contract;
-    
+
     if (contractArr.length) {
         const contractAddrParams: any[] = [];
         for (const contract of contractArr) {
