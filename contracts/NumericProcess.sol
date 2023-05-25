@@ -3,6 +3,10 @@ pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
 
+interface NumericIntegration {
+    function test() external view returns (uint256);
+}
+
 contract NumericProcess {
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
 
@@ -16,22 +20,24 @@ contract NumericProcess {
 
     mapping(uint256 => Question) public questions;
 
-    bytes public numericIntegrationContractABI;
-    address public numericIntegrationContractAddr;
-
-    constructor(string memory _abi, address _addr) {
-        numericIntegrationContractABI = _abi;
-        numericIntegrationContractAddr = _addr;
+    NumericIntegration private numericIntegration;
+    
+    constructor(address _addr) {
+        numericIntegration = NumericIntegration(_addr);
     }
 
-    function createEvent(uint256 _questionId, string memory _question) public {
-        // uint256 _questionId = uint256(keccak256(abi.encodePacked(_question)));
+    function createEvent(uint256 _questionId, string memory _question) external {
         require(!questions[_questionId].isExists, "Question already exists");
-        questions[_questionId] = Question(_questionId, _question, new address[](0), true);
+
+        Question storage question = questions[_questionId];
+        question.questionId = _questionId;
+        question.question = _question;
+        question.isExists = true;
+
         emit NewNumericQuestion(_questionId, _question, address(this));
     }
 
-    function answerQuestion(uint256 _questionId, uint256 _answer) public {
+    function answerQuestion(uint256 _questionId, uint256 _answer) external {
         require(questions[_questionId].isExists, "Question does not exist");
         questions[_questionId].answers[msg.sender] = _answer;
         bool _alreadyAnswered = false;
@@ -42,21 +48,21 @@ contract NumericProcess {
             }
         }
         if (!_alreadyAnswered) {
-            questions[questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(msg.sender);
         }
     }
 
-    function getAnswerByAnswerer(uint256 questionId, address answerer) public view returns (uint256) {
-        return questions[questionId].answers[answerer];
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256) {
+        return questions[_questionId].answers[answerer];
     }
 
-    function getAllAnswerers(uint256 questionId) public view returns (address[] memory) {
-        return questions[questionId].answerers;
+    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory) {
+        return questions[_questionId].answerers;
     }
 
-     function callNumericIntegrationContract() public {
-        (bool success, bytes memory result) = numericIntegrationContractAddr.call(numericIntegrationContractABI);
-        require(success, "Numeric integration function call failed");
+    function callNumericIntegrationContract() external view {
+        uint256 result = numericIntegration.test();
+        console.log(result);
     }
 
 }

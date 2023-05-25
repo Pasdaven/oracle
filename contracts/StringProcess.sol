@@ -3,6 +3,10 @@ pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
 
+interface StringIntegration {
+
+}
+
 contract StringProcess {
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
 
@@ -16,21 +20,24 @@ contract StringProcess {
 
     mapping(uint256 => Question) public questions;
 
-    bytes public stringIntegrationContractABI;
-    address public stringIntegrationContractAddr;
+    StringIntegration private stringIntegration;
 
-    constructor(string memory _abi, address _addr) {
-        stringIntegrationContractABI = _abi;
-        stringIntegrationContractAddr = _addr;
+    constructor(address _addr) {
+        stringIntegration = StringIntegration(_addr);
     }
 
-    function createEvent(uint256 _questionId, string memory _question) public {
+    function createEvent(uint256 _questionId, string memory _question) external {
         require(!questions[_questionId].isExists, "Question already exists");
-        questions[_questionId] = Question(_questionId, _question, new address[](0), true);
+        
+        Question storage question = questions[_questionId];
+        question.questionId = _questionId;
+        question.question = _question;
+        question.isExists = true;
+
         emit NewStringQuestion(_questionId, _question, address(this));
     }
 
-    function answerQuestion(uint256 _questionId, string memory _answer) public {
+    function answerQuestion(uint256 _questionId, string memory _answer) external {
         require(questions[_questionId].isExists, "Question does not exist");
         questions[_questionId].answers[msg.sender] = _answer;
         bool _alreadyAnswered = false;
@@ -41,20 +48,19 @@ contract StringProcess {
             }
         }
         if (!_alreadyAnswered) {
-            questions[questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(msg.sender);
         }
     }
 
-    function getAnswerByAnswerer(uint256 questionId, address answerer) public view returns (string memory) {
-        return questions[questionId].answers[answerer];
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory) {
+        return questions[_questionId].answers[answerer];
     }
 
-    function getAllAnswerers(uint256 questionId) public view returns (address[] memory) {
-        return questions[questionId].answerers;
+    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory) {
+        return questions[_questionId].answerers;
     }
 
-     function callStringIntegrationContract() public {
-        (bool success, bytes memory result) = stringIntegrationContractAddr.call(stringIntegrationContractABI);
-        require(success, "String integration function call failed");
+    function callStringIntegrationContract() external view {
+        // uint256 result = stringIntegration.test();
     }
 }

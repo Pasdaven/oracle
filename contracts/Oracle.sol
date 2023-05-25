@@ -1,6 +1,22 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+interface NumericProcess {
+    function createEvent(uint256 _questionId, string memory _question) external;
+    function answerQuestion(uint256 _questionId, uint256 _answer) external;
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256);
+    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory);
+    function callNumericIntegrationContract() external view;
+}
+
+interface StringProcess {
+    function createEvent(uint256 _questionId, string memory _question) external;
+    function answerQuestion(uint256 _questionId, string memory _answer) external;
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory);
+    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory);
+    function callStringIntegrationContract() external view;
+}
+
 contract Oracle {
     struct Data {
         string dataType;
@@ -18,10 +34,8 @@ contract Oracle {
     mapping(uint256 => address) public requestIndexToAddress;
     uint256 public requestIndexLength;
 
-    bytes public numericProcessContractABI;
-    address public numericProcessContractAddr;
-    bytes public stringProcessContractABI;
-    address public stringProcessContractAddr;
+    NumericProcess private numericProcess;
+    StringProcess private stringProcess;
 
     constructor(address _numericProcessAddr, address _stringProcessAddr) {
         numericProcess = NumericProcess(_numericProcessAddr);
