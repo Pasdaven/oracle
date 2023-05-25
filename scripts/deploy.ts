@@ -28,7 +28,7 @@ async function main() {
     const addressRecord = await deployContract(
         'contracts/AddressRecord.sol:AddressRecord'
     );
-    const result = addressRecord.getLatestDeployAddress(oracle.address);
+    const result = addressRecord.setLatestDeployAddress(oracle.address);
     console.log(result);
 }
 
