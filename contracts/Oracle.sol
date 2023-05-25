@@ -50,6 +50,13 @@ contract Oracle {
         if (keccak256(bytes(dataTypeCheck.status)) == keccak256(bytes("invalid"))) {
             response = dataTypeCheck;
             response.requestIndex = requestIndexLength;
+        } else {
+            if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
+                numericProcess.createEvent(requestIndexLength, requestData.question);
+            } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
+                stringProcess.createEvent(requestIndexLength, requestData.question);
+            }
+            response = Response("valid", "Valid data type", requestIndexLength);
         }
         responses.push(response);
 
