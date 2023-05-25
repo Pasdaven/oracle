@@ -23,11 +23,9 @@ contract Oracle {
     bytes public stringProcessContractABI;
     address public stringProcessContractAddr;
 
-    constructor(string memory _numericABI, address _numericAddr, string memory _stringABI, address _stringAddr) {
-        numericProcessContractABI = bytes(_numericABI);
-        numericProcessContractAddr = _numericAddr;
-        stringProcessContractABI = bytes(_stringABI);
-        stringProcessContractAddr = _stringAddr;
+    constructor(address _numericProcessAddr, address _stringProcessAddr) {
+        numericProcess = NumericProcess(_numericProcessAddr);
+        stringProcess = StringProcess(_stringProcessAddr);
     }
 
     function processRequest(Data memory requestData) public {
@@ -40,27 +38,15 @@ contract Oracle {
             response.requestIndex = requestIndexLength;
         } else {
             if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
-                callNumericEvent(requestIndexLength, requestData.question);
+                numericProcess.createEvent(requestIndexLength, requestData.question);
             } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
-                callStringEvent(requestIndexLength, requestData.question);
+                stringProcess.createEvent(requestIndexLength, requestData.question);
             }
             response = Response("valid", "Valid data type", requestIndexLength);
         }
         responses.push(response);
 
         requestIndexLength++;
-    }
-
-    function callNumericEvent(uint256 _questionId, string memory _question) public {
-        bytes memory payload = abi.encodeWithSignature("createEvent(uint256,string)", _questionId, _question);
-        (bool success, bytes memory result) = numericProcessContractAddr.call(payload);
-        require(success, "Numeric event creation failed");
-    }
-
-    function callStringEvent(uint256 _questionId, string memory _question) public {
-        bytes memory payload = abi.encodeWithSignature("createEvent(uint256,string)", _questionId, _question);
-        (bool success, bytes memory result) = stringProcessContractAddr.call(payload);
-        require(success, "String event creation failed");
     }
 
     function checkDataType(Data memory _data) public pure returns (Response memory) {
