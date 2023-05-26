@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
-import Oracle from '../../artifacts/contracts/Oracle.sol/Oracle.json';
+import Oracle from '../../blockchain/artifacts/contracts/Oracle.sol/Oracle.json';
 import { useState } from 'react';
 
 const web3 = new Web3('http://localhost:8545');
