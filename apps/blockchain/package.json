@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "dev": "npx hardhat node",
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "npx prettier --write .",
         "format-check": "npx prettier --check .",
