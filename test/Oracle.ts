@@ -3,43 +3,25 @@ import { expect } from 'chai';
 import {
     Oracle,
     Oracle__factory,
-    NumericProcess,
-    NumericProcess__factory,
-    StringProcess,
-    StringProcess__factory,
-    NumericIntegration, 
-    NumericIntegration__factory,
-    StringIntegration,
-    StringIntegration__factory
 } from '../typechain-types';
 
 describe('Oracle', function () {
-    let NumericIntegration: NumericIntegration__factory;
-    let numericIntegration: NumericIntegration;
-    let StringIntegration: StringIntegration__factory;
-    let stringIntegration: StringIntegration;
-
-    let NumericProcess: NumericProcess__factory;
-    let numericProcess: NumericProcess;
-    let StringProcess: StringProcess__factory;
-    let stringProcess: StringProcess;
-
     let Oracle: Oracle__factory;
     let oracle: Oracle;
 
     beforeEach(async () => {
-        NumericIntegration = await ethers.getContractFactory('contracts/NumericIntegration.sol:NumericIntegration');
-        numericIntegration = await NumericIntegration.deploy();
+        let NumericIntegration = await ethers.getContractFactory('contracts/NumericIntegration.sol:NumericIntegration');
+        let numericIntegration = await NumericIntegration.deploy();
         await numericIntegration.deployed();
-        StringIntegration = await ethers.getContractFactory('contracts/NumericIntegration.sol:NumericIntegration');
-        stringIntegration = await StringIntegration.deploy();
+        let StringIntegration = await ethers.getContractFactory('contracts/StringIntegration.sol:StringIntegration');
+        let stringIntegration = await StringIntegration.deploy();
         await stringIntegration.deployed();
 
-        NumericProcess = await ethers.getContractFactory('contracts/NumericProcess.sol:NumericProcess');
-        numericProcess = await NumericProcess.deploy(numericIntegration.address);
+        let NumericProcess = await ethers.getContractFactory('contracts/NumericProcess.sol:NumericProcess');
+        let numericProcess = await NumericProcess.deploy(numericIntegration.address);
         await numericProcess.deployed();
-        StringProcess = await ethers.getContractFactory('contracts/StringProcess.sol:StringProcess');
-        stringProcess = await StringProcess.deploy(stringIntegration.address);
+        let StringProcess = await ethers.getContractFactory('contracts/StringProcess.sol:StringProcess');
+        let stringProcess = await StringProcess.deploy(stringIntegration.address);
         await stringProcess.deployed();
 
         Oracle = await ethers.getContractFactory('Oracle');
