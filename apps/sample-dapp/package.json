@@ -9,7 +9,9 @@
         "tsc": "tsc",
         "lint": "eslint src --ext ts,tsx",
         "lint-fix": "eslint src --ext ts,tsx --fix",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "format": "npx prettier --write .",
+        "format-check": "npx prettier --check ."
     },
     "dependencies": {
         "react": "^18.2.0",
@@ -24,10 +26,12 @@
         "@vitejs/plugin-react": "^4.0.0",
         "autoprefixer": "^10.4.14",
         "eslint": "^8.38.0",
+        "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
         "postcss": "^8.4.23",
+        "prettier": "2.8.8",
         "tailwindcss": "^3.3.2",
         "typescript": "^5.0.2",
         "vite": "^4.3.2"
