@@ -8,7 +8,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "npx prettier --write .",
         "format-check": "npx prettier --check .",
-        "lint": "npx eslint . --ext .ts"
+        "lint": "npx eslint . --ext .ts",
+        "build": "npx hardhat compile"
     },
     "keywords": [],
     "author": "",
