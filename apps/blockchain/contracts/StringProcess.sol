@@ -9,6 +9,7 @@ interface StringIntegration {
 interface Authentication {
     function register() external;
     function getUsers() external view returns (address[] memory);
+    function verifyUser(address _walletAddress) external view returns (bool);
 }
 
 contract StringProcess {
