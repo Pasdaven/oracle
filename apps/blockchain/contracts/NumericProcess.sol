@@ -37,18 +37,18 @@ contract NumericProcess {
         emit NewNumericQuestion(_questionId, _question, address(this));
     }
 
-    function answerQuestion(uint256 _questionId, uint256 _answer) external {
+    function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
         require(questions[_questionId].isExists, "Question does not exist");
-        questions[_questionId].answers[msg.sender] = _answer;
+        questions[_questionId].answers[_walletAddress] = _answer;
         bool _alreadyAnswered = false;
         for (uint256 i = 0; i < questions[_questionId].answerers.length; i++) {
-            if (questions[_questionId].answerers[i] == msg.sender) {
+            if (questions[_questionId].answerers[i] == _walletAddress) {
                 _alreadyAnswered = true;
                 break;
             }
         }
         if (!_alreadyAnswered) {
-            questions[_questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(_walletAddress);
         }
     }
 
