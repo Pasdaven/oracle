@@ -1,8 +1,17 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "./NumericProcess.sol";
-import "./StringProcess.sol";
+interface NumericProcess {
+    function answerQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory);
+}
+
+interface StringProcess {
+    function answerQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory);
+}
+
+interface Authentication {
+    function register(address _walletAddress) external;
+}
 
 contract Controller {
     // auth 錢包地址
@@ -10,27 +19,33 @@ contract Controller {
     //answer question 錢包地址 問題ＩＤ 答案內容
     NumericProcess public numericContract;
     StringProcess public stringContract;
+    Authentication public authContract;
 
-    constructor(address addressOfnumericContract, address addressOfstringContract) {
+    constructor(address addressOfnumericContract, address addressOfstringContract, address addressOfauthContract) {
         numericContract = NumericProcess(addressOfnumericContract);
         stringContract = StringProcess(addressOfstringContract);
+        authContract = Authentication(addressOfauthContract);
     }
 
      function sendRequestToAuth(address walletAddress) external returns (string memory) {
-
-     }
-     function sendRequestToGetEvent(address walletAddress) external returns (string memory) {
-        
-     }
-     function sendRequestToAnswerNumericQuestion(address walletAddress, uint256 questionId, uint256 answerContent) external returns (string memory) {
-        try numericContract.answerQuestion(questionId, answerContent) {
+        try authContract.register(walletAddress) {
             return "success";
         } catch {
             return "invalid";
         }
      }
-     function sendRequestToAnswerStringQuestion(address walletAddress, uint256 questionId, string memory answerContent) external returns (string memory) {
-        try stringContract.answerQuestion(questionId, answerContent) {
+     function sendRequestToGetEvent(address walletAddress) external returns (string memory) {
+        
+     }
+     function sendRequestToAnswerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
+        try numericContract.answerQuestion(questionId, answerContent, walletAddress) {
+            return "success";
+        } catch {
+            return "invalid";
+        }
+     }
+     function sendRequestToAnswerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
+        try stringContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
         } catch {
             return "invalid";
