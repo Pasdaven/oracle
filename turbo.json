@@ -16,6 +16,7 @@
             "outputs": []
         },
         "format": {
+            "cache": false,
             "outputs": []
         }
     }
