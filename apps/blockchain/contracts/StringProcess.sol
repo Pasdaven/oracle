@@ -9,7 +9,7 @@ interface StringIntegration {
 interface Authentication {
     function register() external;
     function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) public view returns (bool);
+    function verifyUser(address _walletAddress) external view returns (bool);
 }
 
 contract StringProcess {
@@ -69,5 +69,9 @@ contract StringProcess {
 
     function callStringIntegrationContract() external view {
         // uint256 result = stringIntegration.test();
+    }
+
+    function getAllQuestions() external view returns (mapping(uint256 => Question) memory) {
+        return questions;
     }
 }

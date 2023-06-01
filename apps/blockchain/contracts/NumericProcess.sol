@@ -9,7 +9,7 @@ interface NumericIntegration {
 interface Authentication {
     function register() external;
     function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) public view returns (bool);
+    function verifyUser(address _walletAddress) external view returns (bool);
 }
 
 
@@ -24,7 +24,8 @@ contract NumericProcess {
         bool isExists;
     }
 
-    mapping(uint256 => Question) public questions;
+    mapping(uint256 => Question) private questions;
+    uint256[] private questionIds;
 
     NumericIntegration private numericIntegration;
     Authentication private authentication;
@@ -37,10 +38,19 @@ contract NumericProcess {
     function createEvent(uint256 _questionId, string memory _question) external {
         require(!questions[_questionId].isExists, "Question already exists");
 
-        Question storage question = questions[_questionId];
-        question.questionId = _questionId;
-        question.question = _question;
-        question.isExists = true;
+        questions[_questionId] = Question({
+            questionId: _questionId,
+            question: _question,
+            answerers: new address[](0),
+            isExists: true
+        });
+        // Question storage question = questions[_questionId];
+        // question.questionId = _questionId;
+        // question.question = _question;
+        // question.isExists = true;
+
+
+        questionIds.push(_questionId);
 
         emit NewNumericQuestion(_questionId, _question, address(this));
     }
@@ -72,5 +82,17 @@ contract NumericProcess {
         uint256 result = numericIntegration.test();
         console.log(result);
     }
+
+    // function getAllQuestions() external view returns (mapping(uint256 => Question) memory) {
+    //     uint256 index = 0;
+    //     questions
+    //     for (uint256 i = 0; i < questions.length; i++) {
+    //         if (questions[i].isExists) {
+    //             index++;
+    //         }
+    //     }
+
+    //     return questions;
+    // }
 
 }
