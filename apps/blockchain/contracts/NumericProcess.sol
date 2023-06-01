@@ -9,7 +9,7 @@ interface NumericIntegration {
 interface Authentication {
     function register() external;
     function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) public view returns (bool);
+    function verifyUser(address _walletAddress) external view returns (bool);
 }
 
 
