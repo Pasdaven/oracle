@@ -28,3 +28,9 @@ A blockchain oracle platform built with Hardhat and Solidity.
     npm run lint
     npm run format-check
     ```
+
+4. To format the entire codebase via prettier:
+
+    ```bash
+    npm run format
+    ```
