@@ -3,11 +3,11 @@ pragma solidity ^0.8.9;
 
 contract Authentication {
 
-    Address[] public users;
+    address[] public users;
 
-    function register(address _walletAddress) external view returns () {
+    function register(address _walletAddress) external {
         bool _alreadyRegistered = false;
-        for(int i = 0; i < users.length; i++) {
+        for(uint256 i = 0; i < users.length; i++) {
             if (users[i] == _walletAddress) {
                 _alreadyRegistered = true;
             }
@@ -16,5 +16,9 @@ contract Authentication {
         if (!_alreadyRegistered) {
             users.push(_walletAddress);
         }
+    }
+
+    function getUsers() external view returns (address[] memory) {
+        return users;
     }
 }
