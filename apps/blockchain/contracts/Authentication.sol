@@ -6,14 +6,7 @@ contract Authentication {
     address[] public users;
 
     function register(address _walletAddress) external {
-        bool _alreadyRegistered = false;
-        for(uint256 i = 0; i < users.length; i++) {
-            if (users[i] == _walletAddress) {
-                _alreadyRegistered = true;
-            }
-        }
-
-        if (!_alreadyRegistered) {
+        if (!verifyUserIsRegistered(_walletAddress)) {
             users.push(_walletAddress);
         }
     }
@@ -22,8 +15,7 @@ contract Authentication {
         return users;
     }
 
-    function verifyUser(address _walletAddress) external view returns (bool) {
-        address[] memory users = authentication.getUsers();
+    function verifyUserIsRegistered(address _walletAddress) public view returns (bool) {
         for (uint256 i = 0; i < users.length; i++) {
             if (users[i] == _walletAddress) {
                 return true;
