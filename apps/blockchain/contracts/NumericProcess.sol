@@ -6,6 +6,12 @@ import "hardhat/console.sol";
 interface NumericIntegration {
     function test() external view returns (uint256);
 }
+interface Authentication {
+    function register() external;
+    function getUsers() external view returns (address[] memory);
+    function verifyUser(address _walletAddress) external view returns (bool);
+}
+
 
 contract NumericProcess {
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -21,9 +27,11 @@ contract NumericProcess {
     mapping(uint256 => Question) public questions;
 
     NumericIntegration private numericIntegration;
+    Authentication private authentication;
     
-    constructor(address _addr) {
-        numericIntegration = NumericIntegration(_addr);
+    constructor(address _numericIntegrationAddr, address _authenticationAddr) {
+        numericIntegration = NumericIntegration(_numericIntegrationAddr);
+        authentication = Authentication(_authenticationAddr);
     }
 
     function createEvent(uint256 _questionId, string memory _question) external {

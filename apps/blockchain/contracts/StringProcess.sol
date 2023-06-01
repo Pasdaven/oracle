@@ -6,6 +6,11 @@ import "hardhat/console.sol";
 interface StringIntegration {
 
 }
+interface Authentication {
+    function register() external;
+    function getUsers() external view returns (address[] memory);
+    function verifyUser(address _walletAddress) external view returns (bool);
+}
 
 contract StringProcess {
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -21,9 +26,11 @@ contract StringProcess {
     mapping(uint256 => Question) public questions;
 
     StringIntegration private stringIntegration;
+    Authentication private authentication;
 
-    constructor(address _addr) {
-        stringIntegration = StringIntegration(_addr);
+    constructor(address _stringIntegrationAddr, address _authenticationAddr) {
+        stringIntegration = StringIntegration(_stringIntegrationAddr);
+        authentication = Authentication(_authenticationAddr);
     }
 
     function createEvent(uint256 _questionId, string memory _question) external {
