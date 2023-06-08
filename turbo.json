@@ -18,6 +18,9 @@
         "format": {
             "cache": false,
             "outputs": []
+        },
+        "test": {
+            "outputs": []
         }
     }
 }
