@@ -1,7 +1,7 @@
 import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
-async function main() {
+export async function main() {
     const numericIntegration = await deployContract(
         'contracts/NumericIntegration.sol:NumericIntegration'
     );
@@ -30,6 +30,8 @@ async function main() {
         stringProcess
     );
     console.log('Oracle deployed to:', oracle.address);
+
+    return oracle.address;
 }
 
 async function deployContract(
