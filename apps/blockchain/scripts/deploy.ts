@@ -9,13 +9,19 @@ async function main() {
         'contracts/StringIntegration.sol:StringIntegration'
     );
 
+    const authentication = await deployContract(
+        'contracts/Authentication.sol:Authentication'
+    );
+
     const numericProcess = await deployContract(
         'contracts/NumericProcess.sol:NumericProcess',
-        numericIntegration
+        numericIntegration,
+        authentication
     );
     const stringProcess = await deployContract(
         'contracts/StringProcess.sol:StringProcess',
-        stringIntegration
+        stringIntegration,
+        authentication
     );
 
     const oracle = await deployContract(
