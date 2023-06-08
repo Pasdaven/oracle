@@ -7,29 +7,44 @@ describe('Oracle', function () {
     let oracle: Oracle;
 
     beforeEach(async () => {
+        // Deploy NumericIntegration contracts
         const NumericIntegration = await ethers.getContractFactory(
             'contracts/NumericIntegration.sol:NumericIntegration'
         );
         const numericIntegration = await NumericIntegration.deploy();
         await numericIntegration.deployed();
+
+        // Deploy StringIntegration contracts
         const StringIntegration = await ethers.getContractFactory(
             'contracts/StringIntegration.sol:StringIntegration'
         );
         const stringIntegration = await StringIntegration.deploy();
         await stringIntegration.deployed();
 
+        // Deploy Authentication contract
+        const Authentication = await ethers.getContractFactory(
+            'contracts/Authentication.sol:Authentication'
+        );
+        const authentication = await Authentication.deploy();
+        await authentication.deployed();
+
+        // Deploy NumericProcess contract
         const NumericProcess = await ethers.getContractFactory(
             'contracts/NumericProcess.sol:NumericProcess'
         );
         const numericProcess = await NumericProcess.deploy(
-            numericIntegration.address
+            numericIntegration.address,
+            authentication.address
         );
         await numericProcess.deployed();
+
+        // Deploy StringProcess contract
         const StringProcess = await ethers.getContractFactory(
             'contracts/StringProcess.sol:StringProcess'
         );
         const stringProcess = await StringProcess.deploy(
-            stringIntegration.address
+            stringIntegration.address,
+            authentication.address
         );
         await stringProcess.deployed();
 
