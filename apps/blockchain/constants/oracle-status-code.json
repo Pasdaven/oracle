@@ -1,0 +1,66 @@
+{
+    "Client": {
+        "AUTHORIZED": {
+            "code": 501,
+            "message": "Authorized"
+        },
+        "UNAUTHORIZED": {
+            "code": 502,
+            "message": "Unauthorized"
+        },
+        "QUESTION_NOT_EXIST": {
+            "code": 503,
+            "message": "Question does not exist"
+        },
+        "QUESTION_CREATED_SUCCESS": {
+            "code": 504,
+            "message": "Question created successfully"
+        },
+        "QUESTION_CREATED_FAILURE": {
+            "code": 505,
+            "message": "Question created failure"
+        },
+        "QUESTION_SUBMISSION_SUCCESS": {
+            "code": 506,
+            "message": "Question submission success"
+        },
+        "QUESTION_SUBMISSION_FAILURE": {
+            "code": 507,
+            "message": "Question submission failure"
+        }
+    },
+    "System": {
+        "VALID_DATA_TYPE": {
+            "code": 601,
+            "message": "Valid data type"
+        },
+        "INVALID_DATA_TYPE": {
+            "code": 602,
+            "message": "Invalid data type"
+        },
+        "VALID_DATA_FORMAT": {
+            "code": 603,
+            "message": "Valid data format"
+        },
+        "INVALID_DATA_FORMAT": {
+            "code": 604,
+            "message": "Invalid data format"
+        },
+        "VALID_CALLBACK_ADDRESS": {
+            "code": 605,
+            "message": "Valid callback address"
+        },
+        "INVALID_CALLBACK_ADDRESS": {
+            "code": 606,
+            "message": "Invalid callback address"
+        },
+        "QUESTION_ALREADY_EXIST": {
+            "code": 607,
+            "message": "Question already exist"
+        },
+        "QUESTION_NOT_EXIST": {
+            "code": 608,
+            "message": "Question does not exist"
+        }
+    }
+}
