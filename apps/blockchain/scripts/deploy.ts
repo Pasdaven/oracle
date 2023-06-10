@@ -30,8 +30,6 @@ async function main() {
         stringProcess
     );
     console.log('Oracle deployed to:', oracle.address);
-
-
 }
 
 async function deployContract(
