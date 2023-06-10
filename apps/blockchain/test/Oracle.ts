@@ -21,8 +21,29 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'invalid',
-                message: 'Invalid data type',
+                status: 505,
+                message: 'Question created failure, data type invalid',
+            };
+
+            await oracle.processRequest(data);
+            const result = await oracle.getResponses();
+            const callBackAddress = await oracle.getCallbackAddressByIndex(
+                result.requestIndex
+            );
+            expect(result.status).to.equal(expectedResponse.status);
+            expect(result.message).to.equal(expectedResponse.message);
+            expect(callBackAddress).to.equal(data.callBackAddress);
+        });
+
+        it('should return valid data type', async () => {
+            const data = {
+                dataType: 'String',
+                question: 'false',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
+            const expectedResponse = {
+                status: 504,
+                message: 'Question created successfully',
             };
 
             await oracle.processRequest(data);
@@ -44,13 +65,13 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'invalid',
+                status: 602,
                 message: 'Invalid data type',
             };
             const response = await oracle.checkDataType(data);
             const result = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(result).to.eql(expectedResponse);
         });
@@ -67,20 +88,20 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'valid',
+                status: 601,
                 message: 'Valid data type',
             };
             let response = await oracle.checkDataType(numericData);
             const numericResult = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(numericResult).to.eql(expectedResponse);
 
             response = await oracle.checkDataType(stringData);
             const stringResult = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(stringResult).to.eql(expectedResponse);
         });

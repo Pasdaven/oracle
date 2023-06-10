@@ -25,7 +25,7 @@ contract Oracle {
     }
 
     struct Response {
-        string status;
+        uint256 status;
         string message;
         uint256 requestIndex;
     }
@@ -47,16 +47,15 @@ contract Oracle {
 
         Response memory dataTypeCheck = checkDataType(requestData);
         Response memory response;
-        if (keccak256(bytes(dataTypeCheck.status)) == keccak256(bytes("invalid"))) {
-            response = dataTypeCheck;
-            response.requestIndex = requestIndexLength;
+        if (dataTypeCheck.status == 602) {
+            response = Response(505, "Question created failure, data type invalid", requestIndexLength);
         } else {
             if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
                 numericProcess.createEvent(requestIndexLength, requestData.question);
             } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
                 stringProcess.createEvent(requestIndexLength, requestData.question);
             }
-            response = Response("valid", "Valid data type", requestIndexLength);
+            response = Response(504, "Question created successfully", requestIndexLength);
         }
         responses.push(response);
 
@@ -70,10 +69,10 @@ contract Oracle {
         bytes memory dataTypeBytes = bytes(_data.dataType);
 
         if (keccak256(dataTypeBytes) != keccak256(numericType) && keccak256(dataTypeBytes) != keccak256(stringType)) {
-            return Response("invalid", "Invalid data type", 0);
+            return Response(602, "Invalid data type", 0);
         }
 
-        return Response("valid", "Valid data type", 0);
+        return Response(601, "Valid data type", 0);
     }
 
     function getResponses() public view returns (Response memory) {
