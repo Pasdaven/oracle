@@ -2,15 +2,15 @@ import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
 export async function main() {
+    const authentication = await deployContract(
+        'contracts/Authentication.sol:Authentication'
+    );
+
     const numericIntegration = await deployContract(
         'contracts/NumericIntegration.sol:NumericIntegration'
     );
     const stringIntegration = await deployContract(
         'contracts/StringIntegration.sol:StringIntegration'
-    );
-
-    const authentication = await deployContract(
-        'contracts/Authentication.sol:Authentication'
     );
 
     const numericProcess = await deployContract(
