@@ -89,7 +89,7 @@ contract Oracle {
     function sendAnswerToDApp(uint256 index,string memory answer) external { 
         address _callbackAddress = getCallbackAddressByIndex(index); 
         (bool success, bytes memory data) = _callbackAddress.call{answer: answer.value}( 
-            abi.encodeWithSignature("receiveAnswer(string)",answer.value);
+            abi.encodeWithSignature("receiveAnswer(string)",answer.value)
         ); 
         emit ResponseEvent(success, data);
     }
