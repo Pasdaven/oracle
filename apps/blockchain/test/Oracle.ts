@@ -7,8 +7,37 @@ describe('Oracle', function () {
     let oracle: Oracle;
 
     beforeEach(async () => {
+        const NumericIntegration = await ethers.getContractFactory(
+            'contracts/NumericIntegration.sol:NumericIntegration'
+        );
+        const numericIntegration = await NumericIntegration.deploy();
+        await numericIntegration.deployed();
+        const StringIntegration = await ethers.getContractFactory(
+            'contracts/StringIntegration.sol:StringIntegration'
+        );
+        const stringIntegration = await StringIntegration.deploy();
+        await stringIntegration.deployed();
+
+        const NumericProcess = await ethers.getContractFactory(
+            'contracts/NumericProcess.sol:NumericProcess'
+        );
+        const numericProcess = await NumericProcess.deploy(
+            numericIntegration.address
+        );
+        await numericProcess.deployed();
+        const StringProcess = await ethers.getContractFactory(
+            'contracts/StringProcess.sol:StringProcess'
+        );
+        const stringProcess = await StringProcess.deploy(
+            stringIntegration.address
+        );
+        await stringProcess.deployed();
+
         Oracle = await ethers.getContractFactory('Oracle');
-        oracle = await Oracle.deploy();
+        oracle = await Oracle.deploy(
+            numericProcess.address,
+            stringProcess.address
+        );
         await oracle.deployed();
     });
 
