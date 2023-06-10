@@ -6,27 +6,31 @@ A blockchain oracle platform built with Hardhat and Solidity.
 
 1. Install dependencies by running:
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
-1. Set up Ganache as a local Ethereum blockchain environment. Refer to [https://trufflesuite.com/ganache/](https://trufflesuite.com/ganache/) for more information.
-2. Copy the environment variable file:
+2. Running modes:
 
-```bash
-cp .env.example .env
-```
+    To build the project for production deployment, use:
+    ```bash
+    npm run build
+    ```
 
-1. Set up the environment variables:
+    To start the development mode, use:
+    ```bash
+    npm run dev
+    ```
 
-```bash
-PRIVATE_KEY= <- Enter the wallet private key here
-PROVIDER_URL= <- Enter the Ganache RPC server URL. Default is <http://127.0.0.1:7545>
-```
+3. Code quality checks by running:
 
-1. Write the deployment script in `scripts/deploy.ts`.
-2. Deploy the contract to the local blockchain:
+    ```bash
+    npm run lint
+    npm run format-check
+    ```
 
-```bash
-npx hardhat run scripts/deploy.ts --network localganache
-```
+4. To format the entire codebase via prettier:
+
+    ```bash
+    npm run format
+    ```
