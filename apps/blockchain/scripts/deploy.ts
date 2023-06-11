@@ -1,7 +1,7 @@
 import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
-async function main() {
+export async function main() {
     const authentication = await deployContract(
         'contracts/Authentication.sol:Authentication'
     );
@@ -35,7 +35,7 @@ async function main() {
         'contracts/AddressRecord.sol:AddressRecord'
     );
     const result = addressRecord.setLatestDeployAddress(oracle.address);
-    console.log(result);
+    return oracle.address;
 }
 
 async function deployContract(
