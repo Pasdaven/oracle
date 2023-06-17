@@ -21,11 +21,15 @@ export const connectWallet = async (
     setError('');
     if (checkEthereumExists(setError)) {
         try {
-            const accounts = await window.ethereum.request({
+            const accounts = await window.ethereum.request<string[]>({
                 method: 'eth_requestAccounts',
             });
-            console.log(accounts);
-            setAccount(accounts[0]);
+            if (accounts && accounts.length > 0) {
+                console.log(accounts);
+                setAccount(accounts[0] as string);
+            } else {
+                setError('No accounts found.');
+            }
         } catch (err: any) {
             setError(err.message);
         }
