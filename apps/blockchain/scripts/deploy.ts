@@ -31,6 +31,10 @@ export async function main() {
     );
     console.log('Oracle deployed to:', oracle.address);
 
+    const addressRecord = await deployContract(
+        'contracts/AddressRecord.sol:AddressRecord'
+    );
+    const result = addressRecord.setLatestDeployAddress(oracle.address);
     return oracle.address;
 }
 
@@ -44,7 +48,7 @@ async function deployContract(
     let contract: Contract;
 
     if (contractArr.length) {
-        const contractAddrParams: any[] = [];
+        const contractAddrParams: string[] = [];
         for (const contract of contractArr) {
             contractAddrParams.push(contract.address);
         }
