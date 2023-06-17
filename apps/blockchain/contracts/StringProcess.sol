@@ -2,15 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
-
-interface StringIntegration {
-
-}
-interface Authentication {
-    function register() external;
-    function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) external view returns (bool);
-}
+import "./StringIntegration.sol";
+import "./Authentication.sol";
 
 contract StringProcess {
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);

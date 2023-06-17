@@ -2,16 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
-
-interface NumericIntegration {
-    function test() external view returns (uint256);
-}
-interface Authentication {
-    function register() external;
-    function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) external view returns (bool);
-}
-
+import "./NumericIntegration.sol";
+import "./Authentication.sol";
 
 contract NumericProcess {
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
