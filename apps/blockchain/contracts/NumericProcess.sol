@@ -6,6 +6,12 @@ import "hardhat/console.sol";
 interface NumericIntegration {
     function test() external view returns (uint256);
 }
+interface Authentication {
+    function register() external;
+    function getUsers() external view returns (address[] memory);
+    function verifyUser(address _walletAddress) external view returns (bool);
+}
+
 
 contract NumericProcess {
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -21,9 +27,11 @@ contract NumericProcess {
     mapping(uint256 => Question) public questions;
 
     NumericIntegration private numericIntegration;
+    Authentication private authentication;
     
-    constructor(address _addr) {
-        numericIntegration = NumericIntegration(_addr);
+    constructor(address _numericIntegrationAddr, address _authenticationAddr) {
+        numericIntegration = NumericIntegration(_numericIntegrationAddr);
+        authentication = Authentication(_authenticationAddr);
     }
 
     function createEvent(uint256 _questionId, string memory _question) external {
@@ -37,18 +45,20 @@ contract NumericProcess {
         emit NewNumericQuestion(_questionId, _question, address(this));
     }
 
-    function answerQuestion(uint256 _questionId, uint256 _answer) external {
+    function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
+        require(authentication.verifyUser(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
-        questions[_questionId].answers[msg.sender] = _answer;
+        
+        questions[_questionId].answers[_walletAddress] = _answer;
         bool _alreadyAnswered = false;
         for (uint256 i = 0; i < questions[_questionId].answerers.length; i++) {
-            if (questions[_questionId].answerers[i] == msg.sender) {
+            if (questions[_questionId].answerers[i] == _walletAddress) {
                 _alreadyAnswered = true;
                 break;
             }
         }
         if (!_alreadyAnswered) {
-            questions[_questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(_walletAddress);
         }
     }
 
