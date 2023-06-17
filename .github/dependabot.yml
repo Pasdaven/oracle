@@ -1,17 +1,7 @@
 version: 2
 updates:
-    # Hardhat
+    # Monorepo
     - package-ecosystem: 'npm'
       directory: '/'
-      schedule:
-          interval: 'weekly'
-    # React w/ Vite
-    - package-ecosystem: 'npm'
-      directory: '/sample-dapp'
-      schedule:
-          interval: 'weekly'
-    # Next.js
-    - package-ecosystem: 'npm'
-      directory: '/frontend'
       schedule:
           interval: 'weekly'
