@@ -4,7 +4,11 @@
   "description": "A blockchain oracle platform built with Hardhat and Solidity.",
   "license": "MIT",
   "private": true,
-  "workspaces": ["packages/*", "apps/*", "docs/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "docs/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -14,9 +18,12 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
     "eslint": "8.42.0",
+    "eslint-config-custom": "*",
     "prettier": "^2.5.1",
     "turbo": "^1.10.1"
+  },
+  "dependencies": {
+    "@3rdweb/hooks": "^1.9.2"
   }
 }
