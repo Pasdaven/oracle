@@ -6,9 +6,7 @@ declare global {
     }
 }
 
-const checkEthereumExists = (
-    setError: (message: string) => void
-): boolean => {
+const checkEthereumExists = (setError: (message: string) => void): boolean => {
     if (!window.ethereum) {
         setError('Please Install MetaMask.');
         return false;
