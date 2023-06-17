@@ -38,7 +38,7 @@ contract StringProcess {
     }
 
     function answerQuestion(uint256 _questionId, string memory _answer, address _walletAddress) external {
-        require(authentication.verifyUser(_walletAddress), "User does not registered");
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
         
         questions[_questionId].answers[_walletAddress] = _answer;
