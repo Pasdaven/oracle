@@ -1,6 +1,6 @@
 'use client';
 
-import { connectWallet } from '@/util/metamask';
+import { connectWallet } from '@/lib/metamask';
 import { useState } from 'react';
 
 export default function WalletPage() {
