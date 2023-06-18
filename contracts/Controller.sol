@@ -13,18 +13,22 @@ interface Authentication {
     function register(address _walletAddress) external;
 }
 
+interface ProvideEvent {
+    function getNumericQuestions(address walletAddress) external view returns (uint256[] memory, string[] memory);
+    function getStringQuestions(address walletAddress) external view returns (uint256[] memory, string[] memory);
+}
+
 contract Controller {
-    // auth 錢包地址
-    // get event 錢包地址
-    //answer question 錢包地址 問題ＩＤ 答案內容
     NumericProcess public numericContract;
     StringProcess public stringContract;
     Authentication public authContract;
+    ProvideEvent public provideEventContract;
 
-    constructor(address addressOfnumericContract, address addressOfstringContract, address addressOfauthContract) {
+    constructor(address addressOfnumericContract, address addressOfstringContract, address addressOfauthContract, address addressOfprovideEventContract) {
         numericContract = NumericProcess(addressOfnumericContract);
         stringContract = StringProcess(addressOfstringContract);
         authContract = Authentication(addressOfauthContract);
+        provideEventContract = ProvideEvent(addressOfprovideEventContract);
     }
 
      function sendRequestToAuth(address walletAddress) external returns (string memory) {
@@ -34,9 +38,23 @@ contract Controller {
             return "invalid";
         }
      }
-     function sendRequestToGetEvent(address walletAddress) external returns (string memory) {
-        
+
+     function sendRequestToGetNumericEvent(address walletAddress) external view returns (string memory) {
+        try provideEventContract.getNumericQuestions(walletAddress) {
+            return "success";
+        } catch {
+            return "invalid";
+        }
      }
+
+     function sendRequestToGetStringEvent(address walletAddress) external view returns (string memory) {
+        try provideEventContract.getStringQuestions(walletAddress) {
+            return "success";
+        } catch {
+            return "invalid";
+        }
+     }
+
      function sendRequestToAnswerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
         try numericContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
@@ -44,6 +62,7 @@ contract Controller {
             return "invalid";
         }
      }
+
      function sendRequestToAnswerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
         try stringContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
@@ -51,4 +70,5 @@ contract Controller {
             return "invalid";
         }
      }
+
 }
