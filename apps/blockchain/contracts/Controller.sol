@@ -19,7 +19,7 @@ contract Controller {
         provideEventContract = ProvideEvent(addressOfprovideEventContract);
     }
 
-     function Auth(address walletAddress) external returns (string memory) {
+     function auth(address walletAddress) external returns (string memory) {
         try authContract.register(walletAddress) {
             return "success";
         } catch {
@@ -27,7 +27,7 @@ contract Controller {
         }
      }
 
-     function GetNumericEvent(address walletAddress) external view returns (string memory) {
+     function getNumericEvent(address walletAddress) external view returns (string memory) {
         try provideEventContract.getNumericQuestions(walletAddress) {
             return "success";
         } catch {
@@ -35,7 +35,7 @@ contract Controller {
         }
      }
 
-     function GetStringEvent(address walletAddress) external view returns (string memory) {
+     function getStringEvent(address walletAddress) external view returns (string memory) {
         try provideEventContract.getStringQuestions(walletAddress) {
             return "success";
         } catch {
@@ -43,7 +43,7 @@ contract Controller {
         }
      }
 
-     function AnswerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
+     function answerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
         try numericContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
         } catch {
@@ -51,7 +51,7 @@ contract Controller {
         }
      }
 
-     function AnswerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
+     function answerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
         try stringContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
         } catch {
