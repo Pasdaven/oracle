@@ -32,7 +32,8 @@ contract NumericProcess {
     }
 
     // Getters
-    function getQuestions() external view returns (uint256[] memory, string[] memory) {
+    function getQuestions(address _walletAddress) external view returns (uint256[] memory, string[] memory) {
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         uint256[] memory _questionIds = new uint256[](questionIds.length);
         string[] memory _questions = new string[](questionIds.length);
         for (uint256 i = 0; i < questionIds.length; i++) {

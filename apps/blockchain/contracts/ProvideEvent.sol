@@ -14,11 +14,11 @@ contract ProvideEvent {
         stringProcess = StringProcess(_stringProcessAddr);
     }
 
-    function getNumericQuestions() external view returns (uint256[] memory, string[] memory) {
-        return numericProcess.getQuestions();
+    function getNumericQuestions(address _walletAddress) external view returns (uint256[] memory, string[] memory) {
+        return numericProcess.getQuestions(_walletAddress);
     }
 
-    function getStringQuestions() external view returns (uint256[] memory, string[] memory) {
-        return stringProcess.getQuestions();
+    function getStringQuestions(address _walletAddress) external view returns (uint256[] memory, string[] memory) {
+        return stringProcess.getQuestions(_walletAddress);
     }
 }
