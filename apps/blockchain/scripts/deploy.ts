@@ -24,6 +24,20 @@ export async function main() {
         authentication
     );
 
+    const provideEvent = await deployContract(
+        'contracts/ProvideEvent.sol:ProvideEvent',
+        numericProcess,
+        stringProcess
+    );
+
+    await deployContract(
+        'contracts/Controller.sol:Controller',
+        numericProcess,
+        stringProcess,
+        authentication,
+        provideEvent
+    );
+
     const oracle = await deployContract(
         'contracts/Oracle.sol:Oracle',
         numericProcess,
