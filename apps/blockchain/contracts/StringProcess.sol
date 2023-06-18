@@ -6,8 +6,11 @@ import "./StringIntegration.sol";
 import "./Authentication.sol";
 
 contract StringProcess {
+
+    // Events
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
 
+    // Structs
     struct Question {
         uint256 questionId;
         string question;
@@ -16,24 +19,52 @@ contract StringProcess {
         bool isExists;
     }
 
+    // Variables
     mapping(uint256 => Question) public questions;
-
+    uint256[] private questionIds;
     StringIntegration private stringIntegration;
     Authentication private authentication;
 
+    // Constructor
     constructor(address _stringIntegrationAddr, address _authenticationAddr) {
         stringIntegration = StringIntegration(_stringIntegrationAddr);
         authentication = Authentication(_authenticationAddr);
     }
 
-    function createEvent(uint256 _questionId, string memory _question) external {
-        require(!questions[_questionId].isExists, "Question already exists");
-        
+    // Getters
+    function getQuestions(address _walletAddress) external view returns (uint256[] memory, string[] memory) {
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
+        uint256[] memory _questionIds = new uint256[](questionIds.length);
+        string[] memory _questions = new string[](questionIds.length);
+        for (uint256 i = 0; i < questionIds.length; i++) {
+            if (!questions[questionIds[i]].isExists) continue;
+            _questionIds[i] = questions[questionIds[i]].questionId;
+            _questions[i] = questions[questionIds[i]].question;
+        }
+        return (_questionIds, _questions);
+    }
+
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory) {
+        return questions[_questionId].answers[answerer];
+    }
+
+    function getAnswerers(uint256 _questionId) external view returns (address[] memory) {
+        return questions[_questionId].answerers;
+    }
+
+    // Setters
+    function setQuestions(uint256 _questionId, string memory _question) private {
         Question storage question = questions[_questionId];
         question.questionId = _questionId;
         question.question = _question;
         question.isExists = true;
+    }
 
+    // Functions
+    function createEvent(uint256 _questionId, string memory _question) external {
+        require(!questions[_questionId].isExists, "Question already exists");
+        questionIds.push(_questionId);
+        setQuestions(_questionId, _question);
         emit NewStringQuestion(_questionId, _question, address(this));
     }
 
@@ -52,14 +83,6 @@ contract StringProcess {
         if (!_alreadyAnswered) {
             questions[_questionId].answerers.push(_walletAddress);
         }
-    }
-
-    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory) {
-        return questions[_questionId].answers[answerer];
-    }
-
-    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory) {
-        return questions[_questionId].answerers;
     }
 
     function callStringIntegrationContract() external view {
