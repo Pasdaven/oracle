@@ -1,7 +1,11 @@
 import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
-async function main() {
+export async function main() {
+    const authentication = await deployContract(
+        'contracts/Authentication.sol:Authentication'
+    );
+
     const numericIntegration = await deployContract(
         'contracts/NumericIntegration.sol:NumericIntegration'
     );
@@ -11,11 +15,13 @@ async function main() {
 
     const numericProcess = await deployContract(
         'contracts/NumericProcess.sol:NumericProcess',
-        numericIntegration
+        numericIntegration,
+        authentication
     );
     const stringProcess = await deployContract(
         'contracts/StringProcess.sol:StringProcess',
-        stringIntegration
+        stringIntegration,
+        authentication
     );
 
     const oracle = await deployContract(
@@ -24,6 +30,12 @@ async function main() {
         stringProcess
     );
     console.log('Oracle deployed to:', oracle.address);
+
+    const addressRecord = await deployContract(
+        'contracts/AddressRecord.sol:AddressRecord'
+    );
+    const result = addressRecord.setLatestDeployAddress(oracle.address);
+    return oracle.address;
 }
 
 async function deployContract(
@@ -36,7 +48,7 @@ async function deployContract(
     let contract: Contract;
 
     if (contractArr.length) {
-        const contractAddrParams: any[] = [];
+        const contractAddrParams: string[] = [];
         for (const contract of contractArr) {
             contractAddrParams.push(contract.address);
         }

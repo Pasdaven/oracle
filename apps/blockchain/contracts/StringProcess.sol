@@ -2,10 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
-
-interface StringIntegration {
-
-}
+import "./StringIntegration.sol";
+import "./Authentication.sol";
 
 contract StringProcess {
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -21,9 +19,11 @@ contract StringProcess {
     mapping(uint256 => Question) public questions;
 
     StringIntegration private stringIntegration;
+    Authentication private authentication;
 
-    constructor(address _addr) {
-        stringIntegration = StringIntegration(_addr);
+    constructor(address _stringIntegrationAddr, address _authenticationAddr) {
+        stringIntegration = StringIntegration(_stringIntegrationAddr);
+        authentication = Authentication(_authenticationAddr);
     }
 
     function createEvent(uint256 _questionId, string memory _question) external {
@@ -37,18 +37,20 @@ contract StringProcess {
         emit NewStringQuestion(_questionId, _question, address(this));
     }
 
-    function answerQuestion(uint256 _questionId, string memory _answer) external {
+    function answerQuestion(uint256 _questionId, string memory _answer, address _walletAddress) external {
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
-        questions[_questionId].answers[msg.sender] = _answer;
+        
+        questions[_questionId].answers[_walletAddress] = _answer;
         bool _alreadyAnswered = false;
         for (uint256 i = 0; i < questions[_questionId].answerers.length; i++) {
-            if (questions[_questionId].answerers[i] == msg.sender) {
+            if (questions[_questionId].answerers[i] == _walletAddress) {
                 _alreadyAnswered = true;
                 break;
             }
         }
         if (!_alreadyAnswered) {
-            questions[_questionId].answerers.push(msg.sender);
+            questions[_questionId].answerers.push(_walletAddress);
         }
     }
 
