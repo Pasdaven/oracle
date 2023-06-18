@@ -31,7 +31,7 @@ contract Controller {
         provideEventContract = ProvideEvent(addressOfprovideEventContract);
     }
 
-     function sendRequestToAuth(address walletAddress) external returns (string memory) {
+     function Auth(address walletAddress) external returns (string memory) {
         try authContract.register(walletAddress) {
             return "success";
         } catch {
@@ -39,7 +39,7 @@ contract Controller {
         }
      }
 
-     function sendRequestToGetNumericEvent(address walletAddress) external view returns (string memory) {
+     function GetNumericEvent(address walletAddress) external view returns (string memory) {
         try provideEventContract.getNumericQuestions(walletAddress) {
             return "success";
         } catch {
@@ -47,7 +47,7 @@ contract Controller {
         }
      }
 
-     function sendRequestToGetStringEvent(address walletAddress) external view returns (string memory) {
+     function GetStringEvent(address walletAddress) external view returns (string memory) {
         try provideEventContract.getStringQuestions(walletAddress) {
             return "success";
         } catch {
@@ -55,7 +55,7 @@ contract Controller {
         }
      }
 
-     function sendRequestToAnswerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
+     function AnswerNumericQuestion(uint256 questionId, uint256 answerContent, address walletAddress) external returns (string memory) {
         try numericContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
         } catch {
@@ -63,7 +63,7 @@ contract Controller {
         }
      }
 
-     function sendRequestToAnswerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
+     function AnswerStringQuestion(uint256 questionId, string memory answerContent, address walletAddress) external returns (string memory) {
         try stringContract.answerQuestion(questionId, answerContent, walletAddress) {
             return "success";
         } catch {
