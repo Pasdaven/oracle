@@ -1,32 +1,24 @@
-import Web3 from 'web3';
-import { AbiItem } from 'web3-utils';
-import Controller from '../../blockchain/artifacts/contracts/Controller.sol/Controller.json';
+import { ethers } from 'ethers';
+import controllerAbi from '../../blockchain/artifacts/contracts/Controller.sol/Controller.json';
 
-const web3 = new Web3('http://localhost:8545');
-
-const ControllerABI = Controller.abi;
 const contractAddress = '';
-const controller = new web3.eth.Contract(
-    ControllerABI as AbiItem[],
-    contractAddress
-);
+const contractABI = controllerAbi.abi;
+const provider = new ethers.JsonRpcProvider();
+
+const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
 export const authenticate = async (walletAddress: string) => {
-    const request = await controller.methods.auth(walletAddress).call();
+    const request = await contract.auth(walletAddress);
     return request;
 };
 
 export const getNumericEvent = async (walletAddress: string) => {
-    const request = await controller.methods
-        .getNumericEvent(walletAddress)
-        .call();
+    const request = await contract.getNumericEvent(walletAddress);
     return request;
 };
 
 export const getStringEvent = async (walletAddress: string) => {
-    const request = await controller.methods
-        .getStringEvent(walletAddress)
-        .call();
+    const request = await contract.getStringEvent(walletAddress);
     return request;
 };
 
@@ -35,9 +27,11 @@ export const answerNumericQuestion = async (
     answerContent: number,
     walletAddress: string
 ) => {
-    const request = await controller.methods
-        .answerNumericQuestion(questionId, answerContent, walletAddress)
-        .call();
+    const request = await contract.answerNumericQuestion(
+        questionId,
+        answerContent,
+        walletAddress
+    );
     return request;
 };
 
@@ -46,8 +40,10 @@ export const answerStringQuestion = async (
     answerContent: string,
     walletAddress: string
 ) => {
-    const request = await controller.methods
-        .answerStringQuestion(questionId, answerContent, walletAddress)
-        .call();
+    const request = await contract.answerStringQuestion(
+        questionId,
+        answerContent,
+        walletAddress
+    );
     return request;
 };
