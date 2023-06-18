@@ -2,15 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
-
-interface StringIntegration {
-
-}
-interface Authentication {
-    function register() external;
-    function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) external view returns (bool);
-}
+import "./StringIntegration.sol";
+import "./Authentication.sol";
 
 contract StringProcess {
     event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -45,7 +38,7 @@ contract StringProcess {
     }
 
     function answerQuestion(uint256 _questionId, string memory _answer, address _walletAddress) external {
-        require(authentication.verifyUser(_walletAddress), "User does not registered");
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
         
         questions[_questionId].answers[_walletAddress] = _answer;

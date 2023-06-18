@@ -2,16 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
-
-interface NumericIntegration {
-    function test() external view returns (uint256);
-}
-interface Authentication {
-    function register() external;
-    function getUsers() external view returns (address[] memory);
-    function verifyUser(address _walletAddress) external view returns (bool);
-}
-
+import "./NumericIntegration.sol";
+import "./Authentication.sol";
 
 contract NumericProcess {
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
@@ -56,7 +48,7 @@ contract NumericProcess {
     }
 
     function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
-        require(authentication.verifyUser(_walletAddress), "User does not registered");
+        require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
         
         questions[_questionId].answers[_walletAddress] = _answer;
