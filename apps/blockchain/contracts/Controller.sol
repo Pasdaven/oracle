@@ -12,11 +12,11 @@ contract Controller {
     Authentication public authContract;
     ProvideEvent public provideEventContract;
 
-    constructor(address addressOfnumericContract, address addressOfstringContract, address addressOfauthContract, address addressOfprovideEventContract) {
-        numericContract = NumericProcess(addressOfnumericContract);
-        stringContract = StringProcess(addressOfstringContract);
-        authContract = Authentication(addressOfauthContract);
-        provideEventContract = ProvideEvent(addressOfprovideEventContract);
+    constructor(address addressOfNumericContract, address addressOfStringContract, address addressOfAuthContract, address addressOfProvideEventContract) {
+        numericContract = NumericProcess(addressOfNumericContract);
+        stringContract = StringProcess(addressOfStringContract);
+        authContract = Authentication(addressOfAuthContract);
+        provideEventContract = ProvideEvent(addressOfProvideEventContract);
     }
 
      function auth(address walletAddress) external returns (string memory) {
