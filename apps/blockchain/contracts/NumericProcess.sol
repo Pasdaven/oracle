@@ -6,8 +6,11 @@ import "./NumericIntegration.sol";
 import "./Authentication.sol";
 
 contract NumericProcess {
+
+    // Events
     event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
 
+    // Structs
     struct Question {
         uint256 questionId;
         string question;
@@ -16,34 +19,51 @@ contract NumericProcess {
         bool isExists;
     }
 
+    // Variables
     mapping(uint256 => Question) private questions;
     uint256[] private questionIds;
-
     NumericIntegration private numericIntegration;
     Authentication private authentication;
-    
+
+    // Constructor
     constructor(address _numericIntegrationAddr, address _authenticationAddr) {
         numericIntegration = NumericIntegration(_numericIntegrationAddr);
         authentication = Authentication(_authenticationAddr);
     }
 
+    // Getters
+    function getQuestions() external view returns (uint256[] memory, string[] memory) {
+        uint256[] memory _questionIds = new uint256[](questionIds.length);
+        string[] memory _questions = new string[](questionIds.length);
+        for (uint256 i = 0; i < questionIds.length; i++) {
+            if (!questions[questionIds[i]].isExists) continue;
+            _questionIds[i] = questions[questionIds[i]].questionId;
+            _questions[i] = questions[questionIds[i]].question;
+        }
+        return (_questionIds, _questions);
+    }
+
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256) {
+        return questions[_questionId].answers[answerer];
+    }
+
+    function getAnswerers(uint256 _questionId) external view returns (address[] memory) {
+        return questions[_questionId].answerers;
+    }
+
+    // Setters
+    function setQuestions(uint256 _questionId, string memory _question) private {
+        Question storage question = questions[_questionId];
+        question.questionId = _questionId;
+        question.question = _question;
+        question.isExists = true;
+    }
+
+    // Functions
     function createEvent(uint256 _questionId, string memory _question) external {
         require(!questions[_questionId].isExists, "Question already exists");
-
-        questions[_questionId] = Question({
-            questionId: _questionId,
-            question: _question,
-            answerers: new address[](0),
-            isExists: true
-        });
-        // Question storage question = questions[_questionId];
-        // question.questionId = _questionId;
-        // question.question = _question;
-        // question.isExists = true;
-
-
         questionIds.push(_questionId);
-
+        setQuestions(_questionId, _question);
         emit NewNumericQuestion(_questionId, _question, address(this));
     }
 
@@ -64,29 +84,8 @@ contract NumericProcess {
         }
     }
 
-    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256) {
-        return questions[_questionId].answers[answerer];
-    }
-
-    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory) {
-        return questions[_questionId].answerers;
-    }
-
     function callNumericIntegrationContract() external view {
         uint256 result = numericIntegration.test();
         console.log(result);
     }
-
-    // function getAllQuestions() external view returns (mapping(uint256 => Question) memory) {
-    //     uint256 index = 0;
-    //     questions
-    //     for (uint256 i = 0; i < questions.length; i++) {
-    //         if (questions[i].isExists) {
-    //             index++;
-    //         }
-    //     }
-
-    //     return questions;
-    // }
-
 }
