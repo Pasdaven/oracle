@@ -1,16 +1,16 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { Oracle, Oracle__factory } from '../typechain-types';
-import { main as contractDeploy } from '../scripts/deploy';
+import * as deploy from '../lib/deploy';
 
 describe('Oracle', function () {
     let Oracle: Oracle__factory;
     let oracle: Oracle;
 
     beforeEach(async () => {
-        const oracleAddress = await contractDeploy();
+        const oracleContract = await deploy.oracleContract();
         Oracle = await ethers.getContractFactory('Oracle');
-        oracle = Oracle.attach(oracleAddress);
+        oracle = Oracle.attach(oracleContract.address);
     });
 
     describe('processRequest', function () {
