@@ -19,12 +19,6 @@ const getContract = async () => {
     return contract;
 };
 
-export const foo = async () => {
-    const contract = await getContract();
-    const request = await contract.foo();
-    return request;
-};
-
 export const authenticate = async (walletAddress: string) => {
     const contract = await getContract();
     const request = await contract.auth(walletAddress);
