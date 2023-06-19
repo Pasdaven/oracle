@@ -1,4 +1,5 @@
 import { MetaMaskInpageProvider } from '@metamask/providers';
+import { authenticate } from '@/lib/oracle';
 
 declare global {
     interface Window {
@@ -27,6 +28,7 @@ export const connectWallet = async (
             if (accounts && accounts.length > 0) {
                 console.log(accounts);
                 setAccount(accounts[0] as string);
+                authenticate(accounts[0] as string);
             } else {
                 setError('No accounts found.');
             }
