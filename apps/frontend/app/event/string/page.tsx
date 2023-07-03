@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Events, getStringEvent } from '@/lib/oracle';
+import { Event, getStringEvent } from '@/lib/oracle';
 
 const StringEventPage = () => {
-    const [stringEvents, setStringEvents] = useState<Events | null>(null);
+    const [stringEvents, setStringEvents] = useState<Event[] | null>(null);
 
     useEffect(() => {
         const fetchStringEvent = async () => {
@@ -26,9 +26,10 @@ const StringEventPage = () => {
     return (
         <div>
             <h1>String Event</h1>
-            {stringEvents.question.map((question, index) => (
+            {stringEvents.map((data, index) => (
                 <div key={index}>
-                    <h2>{question}</h2>
+                    <p>ID: {data.id}</p>
+                    <p>Question: {data.id}</p>
                 </div>
             ))}
         </div>

@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Events, getNumericEvent } from '@/lib/oracle';
+import { Event, getNumericEvent } from '@/lib/oracle';
 
 const NumericEventPage = () => {
-    const [numericEvents, setNumericEvents] = useState<Events | null>(null);
+    const [numericEvents, setNumericEvents] = useState<Event[] | null>(null);
 
     useEffect(() => {
         const fetchNumericEvent = async () => {
@@ -26,9 +26,10 @@ const NumericEventPage = () => {
     return (
         <div>
             <h1>Numeric Event</h1>
-            {numericEvents.question.map((question, index) => (
+            {numericEvents.map((data, index) => (
                 <div key={index}>
-                    <h2>{question}</h2>
+                    <p>ID: {data.id}</p>
+                    <p>Question: {data.id}</p>
                 </div>
             ))}
         </div>

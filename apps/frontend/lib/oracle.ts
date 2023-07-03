@@ -1,9 +1,9 @@
 import { Contract, ethers } from 'ethers';
 import controllerAbi from '../../blockchain/artifacts/contracts/Controller.sol/Controller.json';
 
-export type Events = {
-    id: number[];
-    question: string[];
+export type Event = {
+    id: number;
+    question: string;
 };
 
 const getProvider = () => {
@@ -32,18 +32,38 @@ export const authenticate = async (walletAddress: string) => {
 
 export const getNumericEvent = async (
     walletAddress: string
-): Promise<Events> => {
+): Promise<Event[]> => {
     const contract = await getContract();
-    const request = await contract.getNumericEvent(walletAddress);
-    return request;
+    const response = await contract.getNumericEvent(walletAddress);
+    const events: Event[] = [];
+    for (let i = 0; i < response.id.length; i++) {
+        const id = Number(response.id[i]);
+        const question = response.question[i];
+        const event = {
+            id: id,
+            question: question,
+        };
+        events.push(event);
+    }
+    return events;
 };
 
 export const getStringEvent = async (
     walletAddress: string
-): Promise<Events> => {
+): Promise<Event[]> => {
     const contract = await getContract();
-    const request = await contract.getStringEvent(walletAddress);
-    return request;
+    const response = await contract.getStringEvent(walletAddress);
+    const events: Event[] = [];
+    for (let i = 0; i < response.id.length; i++) {
+        const id = Number(response.id[i]);
+        const question = response.question[i];
+        const event = {
+            id: id,
+            question: question,
+        };
+        events.push(event);
+    }
+    return events;
 };
 
 export const answerNumericQuestion = async (
