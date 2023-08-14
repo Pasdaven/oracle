@@ -9,43 +9,54 @@ description: Oracle Project Documentation.
 #### Function: processRequest
 
 ##### Description
+
 The `processRequest` function is responsible for receiving a request with data from the DApp and performing validation checks on the request data. Based on the data type, it calls the appropriate subsequent process functions and updates the response accordingly.
 
 ##### Parameters
-- `requestData` (Data struct): The request data received from the DApp, including the callback address, data type, and question.
+
+-   `requestData` (Data struct): The request data received from the DApp, including the callback address, data type, and question.
 
 ##### Modifies
-- `requestIndexToAddress`: Updates the mapping of request index to callback address.
-- `responses`: Adds the response object to the list of responses.
-- `requestIndexLength`: Increments the request index length.
+
+-   `requestIndexToAddress`: Updates the mapping of request index to callback address.
+-   `responses`: Adds the response object to the list of responses.
+-   `requestIndexLength`: Increments the request index length.
 
 #### Function: checkDataType
 
 ##### Description
+
 The `checkDataType` function is a pure function that validates the data type specified in the given request data. It compares the data type with predefined types ("Numeric" and "String") and returns a response indicating whether the data type is valid or invalid.
 
 ##### Parameters
-- `_data` (Data struct): The request data containing the data type to be checked.
+
+-   `_data` (Data struct): The request data containing the data type to be checked.
 
 ##### Returns
-- `response` (Response struct): The response object indicating the validity of the data type. It includes the status ("valid" or "invalid"), a message describing the status.
+
+-   `response` (Response struct): The response object indicating the validity of the data type. It includes the status ("valid" or "invalid"), a message describing the status.
 
 #### Function: getCallbackAddressByIndex
 
 ##### Description
+
 The `getCallbackAddressByIndex` function is a view function that retrieves the callback address associated with a given index in the `requestIndexToAddress` mapping. It allows you to retrieve the callback address based on the provided index.
 
 ##### Parameters
-- `_index` (uint256): The index of the mapping from which to retrieve the callback address.
+
+-   `_index` (uint256): The index of the mapping from which to retrieve the callback address.
 
 ##### Returns
-- `address`: The callback address stored at the specified index in the `requestIndexToAddress` mapping.
+
+-   `address`: The callback address stored at the specified index in the `requestIndexToAddress` mapping.
 
 #### Function: sendAnswerToDApp
 
 ##### Description
+
 The `sendAnswerToDApp` function is defined as part of a smart contract and is designed to send an answer to a decentralized application (DApp). It takes two parameters: index, an unsigned integer, and answer, a string containing the response. The function can receive Ether (payable) to be sent with the call.
 
 ##### Parameters
-- `index` (uint256): The index of the callback address.
-- `answer` (string): The answer you want to send to DApp.
+
+-   `index` (uint256): The index of the callback address.
+-   `answer` (string): The answer you want to send to DApp.
