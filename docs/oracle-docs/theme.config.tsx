@@ -2,16 +2,13 @@ import React from 'react';
 import { DocsThemeConfig } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
-    logo: <span>My Project</span>,
+    logo: <span>Oracle Documentation</span>,
     project: {
-        link: 'https://github.com/shuding/nextra-docs-template',
+        link: 'https://github.com/Pasdaven/oracle',
     },
-    chat: {
-        link: 'https://discord.com',
-    },
-    docsRepositoryBase: 'https://github.com/shuding/nextra-docs-template',
+    docsRepositoryBase: 'https://github.com/Pasdaven/oracle/docs/oracle-docs',
     footer: {
-        text: 'Nextra Docs Template',
+        text: 'Oracle Documentaion © 2023',
     },
 };
 
