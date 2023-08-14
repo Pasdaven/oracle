@@ -1,16 +1,17 @@
 import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { Oracle, Oracle__factory } from '../typechain-types';
-import { main as contractDeploy } from '../scripts/deploy';
+import * as deploy from '../lib/deploy';
+import statusCodes from '../constants/oracle-status-code.json';
 
 describe('Oracle', function () {
     let Oracle: Oracle__factory;
     let oracle: Oracle;
 
     beforeEach(async () => {
-        const oracleAddress = await contractDeploy();
+        const oracleContract = await deploy.oracleContract();
         Oracle = await ethers.getContractFactory('Oracle');
-        oracle = Oracle.attach(oracleAddress);
+        oracle = Oracle.attach(oracleContract.address);
     });
 
     describe('processRequest', function () {
@@ -21,8 +22,29 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'invalid',
-                message: 'Invalid data type',
+                status: statusCodes.Client.QUESTION_CREATED_FAILURE.code,
+                message: statusCodes.Client.QUESTION_CREATED_FAILURE.message,
+            };
+
+            await oracle.processRequest(data);
+            const result = await oracle.getResponses();
+            const callBackAddress = await oracle.getCallbackAddressByIndex(
+                result.requestIndex
+            );
+            expect(result.status).to.equal(expectedResponse.status);
+            expect(result.message).to.equal(expectedResponse.message);
+            expect(callBackAddress).to.equal(data.callBackAddress);
+        });
+
+        it('should return valid data type', async () => {
+            const data = {
+                dataType: 'String',
+                question: 'false',
+                callBackAddress: '0x1234567890123456789012345678901234567890',
+            };
+            const expectedResponse = {
+                status: statusCodes.Client.QUESTION_CREATED_SUCCESS.code,
+                message: statusCodes.Client.QUESTION_CREATED_SUCCESS.message,
             };
 
             await oracle.processRequest(data);
@@ -44,13 +66,13 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'invalid',
-                message: 'Invalid data type',
+                status: statusCodes.System.INVALID_DATA_TYPE.code,
+                message: statusCodes.System.INVALID_DATA_TYPE.message,
             };
             const response = await oracle.checkDataType(data);
             const result = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(result).to.eql(expectedResponse);
         });
@@ -67,20 +89,20 @@ describe('Oracle', function () {
                 callBackAddress: '0x1234567890123456789012345678901234567890',
             };
             const expectedResponse = {
-                status: 'valid',
-                message: 'Valid data type',
+                status: statusCodes.System.VALID_DATA_TYPE.code,
+                message: statusCodes.System.VALID_DATA_TYPE.message,
             };
             let response = await oracle.checkDataType(numericData);
             const numericResult = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(numericResult).to.eql(expectedResponse);
 
             response = await oracle.checkDataType(stringData);
             const stringResult = {
-                status: response.status,
-                message: response.message,
+                status: response.status.toNumber(),
+                message: response.message.toString(),
             };
             expect(stringResult).to.eql(expectedResponse);
         });
