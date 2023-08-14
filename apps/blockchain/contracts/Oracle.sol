@@ -1,21 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-interface NumericProcess {
-    function createEvent(uint256 _questionId, string memory _question) external;
-    function answerQuestion(uint256 _questionId, uint256 _answer) external;
-    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256);
-    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory);
-    function callNumericIntegrationContract() external view;
-}
-
-interface StringProcess {
-    function createEvent(uint256 _questionId, string memory _question) external;
-    function answerQuestion(uint256 _questionId, string memory _answer) external;
-    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory);
-    function getAllAnswerers(uint256 _questionId) external view returns (address[] memory);
-    function callStringIntegrationContract() external view;
-}
+import "./NumericProcess.sol";
+import "./StringProcess.sol";
 
 contract Oracle {
     struct Data {
@@ -25,8 +12,9 @@ contract Oracle {
     }
 
     struct Response {
-        string status;
+        uint256 status;
         string message;
+        string description;
         uint256 requestIndex;
     }
 
@@ -47,16 +35,15 @@ contract Oracle {
 
         Response memory dataTypeCheck = checkDataType(requestData);
         Response memory response;
-        if (keccak256(bytes(dataTypeCheck.status)) == keccak256(bytes("invalid"))) {
-            response = dataTypeCheck;
-            response.requestIndex = requestIndexLength;
+        if (dataTypeCheck.status == 602) {
+            response = Response(505, "QUESTION_CREATED_FAILURE", "Question created failure, Data type invalid", requestIndexLength);
         } else {
             if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
                 numericProcess.createEvent(requestIndexLength, requestData.question);
             } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
                 stringProcess.createEvent(requestIndexLength, requestData.question);
             }
-            response = Response("valid", "Valid data type", requestIndexLength);
+            response = Response(504, "QUESTION_CREATED_SUCCESS", "Question created successfully", requestIndexLength);
         }
         responses.push(response);
 
@@ -70,10 +57,10 @@ contract Oracle {
         bytes memory dataTypeBytes = bytes(_data.dataType);
 
         if (keccak256(dataTypeBytes) != keccak256(numericType) && keccak256(dataTypeBytes) != keccak256(stringType)) {
-            return Response("invalid", "Invalid data type", 0);
+            return Response(602, "INVALID_DATA_TYPE", "Invalid data type", 0);
         }
 
-        return Response("valid", "Valid data type", 0);
+        return Response(601, "VALID_DATA_TYPE", "Valid data type", 0);
     }
 
     function getResponses() public view returns (Response memory) {
@@ -83,5 +70,14 @@ contract Oracle {
 
     function getCallbackAddressByIndex(uint256 _index) public view returns (address) {
         return requestIndexToAddress[_index];
+    }
+
+    event ResponseEvent(bool success, bytes data); 
+    function sendAnswerToDApp(uint256 index,string memory answer) external payable { 
+        address _callbackAddress = getCallbackAddressByIndex(index); 
+        (bool success, bytes memory data) = _callbackAddress.call{value: msg.value}( 
+            abi.encodeWithSignature("receiveAnswer(string)",answer)
+        ); 
+        emit ResponseEvent(success, data);
     }
 }

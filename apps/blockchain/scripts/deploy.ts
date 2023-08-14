@@ -24,6 +24,20 @@ export async function main() {
         authentication
     );
 
+    const provideEvent = await deployContract(
+        'contracts/ProvideEvent.sol:ProvideEvent',
+        numericProcess,
+        stringProcess
+    );
+
+    await deployContract(
+        'contracts/Controller.sol:Controller',
+        numericProcess,
+        stringProcess,
+        authentication,
+        provideEvent
+    );
+
     const oracle = await deployContract(
         'contracts/Oracle.sol:Oracle',
         numericProcess,
@@ -34,7 +48,7 @@ export async function main() {
     const addressRecord = await deployContract(
         'contracts/AddressRecord.sol:AddressRecord'
     );
-    const result = addressRecord.setLatestDeployAddress(oracle.address);
+    addressRecord.setLatestDeployAddress(oracle.address);
     return oracle.address;
 }
 
