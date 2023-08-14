@@ -22,13 +22,13 @@ contract NumericProcess {
     // Variables
     mapping(uint256 => Question) private questions;
     uint256[] private questionIds;
-    NumericIntegration private numericIntegration;
     Authentication private authentication;
+    NumericIntegration private numericIntegration;
 
     // Constructor
-    constructor(address _numericIntegrationAddr, address _authenticationAddr) {
-        numericIntegration = NumericIntegration(_numericIntegrationAddr);
+    constructor(address _authenticationAddr, address _numericIntegrationAddr) {
         authentication = Authentication(_authenticationAddr);
+        numericIntegration = NumericIntegration(_numericIntegrationAddr);
     }
 
     // Getters

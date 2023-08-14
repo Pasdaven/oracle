@@ -22,13 +22,13 @@ contract StringProcess {
     // Variables
     mapping(uint256 => Question) public questions;
     uint256[] private questionIds;
-    StringIntegration private stringIntegration;
     Authentication private authentication;
+    StringIntegration private stringIntegration;
 
     // Constructor
-    constructor(address _stringIntegrationAddr, address _authenticationAddr) {
-        stringIntegration = StringIntegration(_stringIntegrationAddr);
+    constructor(address _authenticationAddr, address _stringIntegrationAddr) {
         authentication = Authentication(_authenticationAddr);
+        stringIntegration = StringIntegration(_stringIntegrationAddr);
     }
 
     // Getters
