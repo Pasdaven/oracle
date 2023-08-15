@@ -1,0 +1,93 @@
+---
+description: Oracle Project Documentation.
+---
+
+# Oracle Project Documentation
+
+### Numeric Process Contract
+
+#### Constructor
+
+The constructor initializes the Numeric Process contract with the addresses of the Authentication and NumericIntegration contracts.
+
+##### Parameters
+
+-   `_authenticationAddr` (address): The address of the Authentication contract.
+-   `_numericIntegrationAddr` (address): The address of the NumericIntegration contract.
+
+#### Function: getQuestions
+
+##### Description
+
+The `getQuestions` function retrieves the list of available questions for a registered user.
+
+##### Parameters
+
+-   `_walletAddress` (address): The wallet address of the user.
+
+##### Returns
+
+-   `_questionIds` (uint256[]): An array of question IDs.
+-   `_questions` (string[]): An array of question descriptions.
+
+#### Function: getAnswerByAnswerer
+
+##### Description
+
+The `getAnswerByAnswerer` function retrieves the answer provided by a specific answerer for a given question.
+
+##### Parameters
+
+-   `_questionId` (uint256): The question ID.
+-   `answerer` (address): The address of the answerer.
+
+##### Returns
+
+-   `answer` (uint256): The answer provided by the answerer.
+
+#### Function: getAnswerers
+
+##### Description
+
+The `getAnswerers` function retrieves the list of answerers for a specific question.
+
+##### Parameters
+
+-   `_questionId` (uint256): The question ID.
+
+##### Returns
+
+-   `answerers` (address[]): An array of answerers' wallet addresses.
+
+#### Function: createEvent
+
+##### Description
+
+The `createEvent` function creates a new numeric question event.
+
+##### Parameters
+
+-   `_questionId` (uint256): The question ID.
+-   `_question` (string): The question description.
+
+##### Emits
+
+-   `NewNumericQuestion` (event): An event indicating the creation of a new numeric question.
+
+#### Function: answerQuestion
+
+##### Description
+
+The `answerQuestion` function allows users to answer a specific question.
+
+##### Parameters
+
+-   `_questionId` (uint256): The question ID.
+-   `_answer` (uint256): The answer provided by the user.
+-   `_walletAddress` (address): The wallet address of the user.
+
+#### Function: callNumericIntegrationContract
+
+##### Description
+
+The `callNumericIntegrationContract` function is designed to call the `test` function of the NumericIntegration contract.

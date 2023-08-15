@@ -1,0 +1,45 @@
+---
+description: Oracle Project Documentation.
+---
+
+# Oracle Project Documentation
+
+### Authentication Contract
+
+#### Function: register
+
+##### Description
+
+The `register` function allows users to register their wallet addresses. It checks if the user is already registered and emits a `Register` event accordingly.
+
+##### Parameters
+
+-   `_walletAddress` (address): The wallet address of the user to be registered.
+
+##### Emits
+
+-   `Register` (event): An event indicating whether the registration was successful or not.
+
+#### Function: getUsers
+
+##### Description
+
+The `getUsers` function is a view function that retrieves the list of registered users' wallet addresses.
+
+##### Returns
+
+-   `users` (address[]): An array containing the wallet addresses of all registered users.
+
+#### Function: verifyUserIsRegistered
+
+##### Description
+
+The `verifyUserIsRegistered` function is a view function that checks if a given wallet address is already registered.
+
+##### Parameters
+
+-   `_walletAddress` (address): The wallet address to be checked.
+
+##### Returns
+
+-   `isRegistered` (bool): A boolean value indicating whether the wallet address is registered or not.
