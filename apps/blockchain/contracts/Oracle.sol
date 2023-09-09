@@ -72,12 +72,12 @@ contract Oracle {
         return requestIndexToAddress[_index];
     }
 
-    event ResponseEvent(bool success, bytes data); 
-    function sendAnswerToDApp(uint256 index,string memory answer) external payable { 
-        address _callbackAddress = getCallbackAddressByIndex(index); 
-        (bool success, bytes memory data) = _callbackAddress.call{value: msg.value}( 
+    event ResponseEvent(bool success, bytes data);
+    function sendAnswerToDApp(uint256 index,string memory answer) external payable {
+        address _callbackAddress = getCallbackAddressByIndex(index);
+        (bool success, bytes memory data) = _callbackAddress.call{value: msg.value}(
             abi.encodeWithSignature("receiveAnswer(string)",answer)
-        ); 
+        );
         emit ResponseEvent(success, data);
     }
 }
