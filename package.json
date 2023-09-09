@@ -4,7 +4,11 @@
   "description": "A blockchain oracle platform built with Hardhat and Solidity.",
   "license": "MIT",
   "private": true,
-  "workspaces": ["packages/*", "apps/*", "docs/*"],
+  "workspaces": [
+    "apps/frontend",
+    "apps/sample-dapp/frontend",
+    "docs/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
