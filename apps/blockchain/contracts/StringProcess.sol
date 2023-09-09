@@ -66,6 +66,8 @@ contract StringProcess {
         questionIds.push(_questionId);
         setQuestions(_questionId, _question);
         emit NewStringQuestion(_questionId, _question, address(this));
+
+        stringIntegration.dataIntergration(_questionId);
     }
 
     function answerQuestion(uint256 _questionId, string memory _answer, address _walletAddress) external {
@@ -83,9 +85,5 @@ contract StringProcess {
         if (!_alreadyAnswered) {
             questions[_questionId].answerers.push(_walletAddress);
         }
-    }
-
-    function callStringIntegrationContract() external view {
-        // uint256 result = stringIntegration.test();
     }
 }

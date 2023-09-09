@@ -2,11 +2,17 @@
 pragma solidity ^0.8.9;
 
 import "hardhat/console.sol";
+import "./DataVerification.sol";
 
 contract NumericIntegration {
 
-    function test() external view returns (uint256) {
-        console.log("test");
-        return 123;
+    DataVerification private dataVerification;
+
+    constructor(address _dataVerificationAddr) {
+        dataVerification = DataVerification(_dataVerificationAddr);
+    }
+
+    function dataIntergration(uint256 _questionId) external {
+        dataVerification.returnResultToOracle(_questionId);
     }
 }
