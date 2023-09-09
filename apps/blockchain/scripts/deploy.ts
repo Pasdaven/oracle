@@ -1,9 +1,15 @@
 import * as deploy from '../lib/deploy';
 
 async function main() {
+    const dataVerification = await deploy.dataVerificationContract();
+    const nodeVoting = await deploy.nodeVotingContract();
     const authentication = await deploy.authenticationContract();
-    const numericIntegration = await deploy.numericIntegrationContract();
-    const stringIntegration = await deploy.stringIntegrationContract();
+    const numericIntegration = await deploy.numericIntegrationContract(
+        dataVerification
+    );
+    const stringIntegration = await deploy.stringIntegrationContract(
+        nodeVoting
+    );
     const numericProcess = await deploy.numericProcessContract(
         authentication,
         numericIntegration

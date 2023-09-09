@@ -12,7 +12,7 @@ contract NumericIntegration {
         dataVerification = DataVerification(_dataVerificationAddr);
     }
 
-    function dataIntergration(uint256 _questionId) external {
-        dataVerification.returnResultToOracle(_questionId);
+    function dataIntergration(uint256 _questionId, address _callBackAddress) external {
+        dataVerification.sendAnswerToDApp(_questionId, _callBackAddress);
     }
 }

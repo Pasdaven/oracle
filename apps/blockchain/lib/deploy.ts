@@ -24,16 +24,34 @@ export async function deployContract(
     return contract;
 }
 
+export async function dataVerificationContract(): Promise<Contract> {
+    return await deployContract('DataVerification');
+}
+
+export async function nodeVotingContract(): Promise<Contract> {
+    return await deployContract('NodeVoting');
+}
+
 export async function authenticationContract(): Promise<Contract> {
     return await deployContract('Authentication');
 }
 
-export async function numericIntegrationContract(): Promise<Contract> {
-    return await deployContract('NumericIntegration');
+export async function numericIntegrationContract(
+    dataVerification?: Contract
+): Promise<Contract> {
+    if (typeof dataVerification === 'undefined') {
+        dataVerification = await dataVerificationContract();
+    }
+    return await deployContract('NumericIntegration', dataVerification);
 }
 
-export async function stringIntegrationContract(): Promise<Contract> {
-    return await deployContract('StringIntegration');
+export async function stringIntegrationContract(
+    nodeVoting?: Contract
+): Promise<Contract> {
+    if (typeof nodeVoting === 'undefined') {
+        nodeVoting = await nodeVotingContract();
+    }
+    return await deployContract('StringIntegration', nodeVoting);
 }
 
 export async function numericProcessContract(

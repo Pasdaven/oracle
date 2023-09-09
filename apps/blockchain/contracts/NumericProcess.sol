@@ -61,13 +61,13 @@ contract NumericProcess {
     }
 
     // Functions
-    function createEvent(uint256 _questionId, string memory _question) external {
+    function createEvent(uint256 _questionId, string memory _question, address _callBackAddress) external {
         require(!questions[_questionId].isExists, "Question already exists");
         questionIds.push(_questionId);
         setQuestions(_questionId, _question);
         emit NewNumericQuestion(_questionId, _question, address(this));
 
-        numericIntegration.dataIntergration(_questionId);
+        numericIntegration.dataIntergration(_questionId, _callBackAddress);
     }
 
     function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
