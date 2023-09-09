@@ -13,8 +13,8 @@ contract StringIntegration {
         nodeVoting = NodeVoting(_nodeVotingAddr);
     }
 
-    function dataIntergration(uint256 _questionId) external {
-        nodeVoting.returnResultToOracle(_questionId);
+    function dataIntergration(uint256 _questionId, address _callBackAddress) external {
+        nodeVoting.sendAnswerToDApp(_questionId, _callBackAddress);
     }
 
 }

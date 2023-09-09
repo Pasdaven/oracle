@@ -7,13 +7,11 @@ import "./Authentication.sol";
 
 contract NodeVoting {
 
-    Oracle private oracle;
-
-    constructor(address _oracleAddr) {
-        oracle = Oracle(_oracleAddr);
-    }
-
-    function returnResultToOracle(uint256 _questionId) external {
-        oracle.sendAnswerToDApp(_questionId, "answer");
+    event ResponseEvent(bool success, bytes data);
+    function sendAnswerToDApp(uint256 _questionId, address _callBackAddress) external payable {
+        (bool success, bytes memory data) = _callBackAddress.call{value: msg.value}(
+            abi.encodeWithSignature("receiveAnswer(string)", "answer")
+        );
+        emit ResponseEvent(success, data);
     }
 }

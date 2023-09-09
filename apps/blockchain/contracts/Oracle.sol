@@ -39,9 +39,9 @@ contract Oracle {
             response = Response(505, "QUESTION_CREATED_FAILURE", "Question created failure, Data type invalid", requestIndexLength);
         } else {
             if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("Numeric"))) {
-                numericProcess.createEvent(requestIndexLength, requestData.question);
+                numericProcess.createEvent(requestIndexLength, requestData.question, requestData.callBackAddress);
             } else if (keccak256(bytes(requestData.dataType)) == keccak256(bytes("String"))) {
-                stringProcess.createEvent(requestIndexLength, requestData.question);
+                stringProcess.createEvent(requestIndexLength, requestData.question, requestData.callBackAddress);
             }
             response = Response(504, "QUESTION_CREATED_SUCCESS", "Question created successfully", requestIndexLength);
         }
@@ -70,14 +70,5 @@ contract Oracle {
 
     function getCallbackAddressByIndex(uint256 _index) public view returns (address) {
         return requestIndexToAddress[_index];
-    }
-
-    event ResponseEvent(bool success, bytes data);
-    function sendAnswerToDApp(uint256 index,string memory answer) external payable {
-        address _callbackAddress = getCallbackAddressByIndex(index);
-        (bool success, bytes memory data) = _callbackAddress.call{value: msg.value}(
-            abi.encodeWithSignature("receiveAnswer(string)",answer)
-        );
-        emit ResponseEvent(success, data);
     }
 }
