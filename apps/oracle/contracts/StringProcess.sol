@@ -1,34 +1,34 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "hardhat/console.sol";
-import "./NumericIntegration.sol";
+import 'truffle/console.sol';
+import "./StringIntegration.sol";
 import "./Authentication.sol";
 
-contract NumericProcess {
+contract StringProcess {
 
     // Events
-    event NewNumericQuestion(uint256 indexed questionId, string question, address contractAddr);
+    event NewStringQuestion(uint256 indexed questionId, string question, address contractAddr);
 
     // Structs
     struct Question {
         uint256 questionId;
         string question;
-        mapping(address => uint256) answers;
+        mapping(address => string) answers;
         address[] answerers;
         bool isExists;
     }
 
     // Variables
-    mapping(uint256 => Question) private questions;
+    mapping(uint256 => Question) public questions;
     uint256[] private questionIds;
     Authentication private authentication;
-    NumericIntegration private numericIntegration;
+    StringIntegration private stringIntegration;
 
     // Constructor
-    constructor(address _authenticationAddr, address _numericIntegrationAddr) {
+    constructor(address _authenticationAddr, address _stringIntegrationAddr) {
         authentication = Authentication(_authenticationAddr);
-        numericIntegration = NumericIntegration(_numericIntegrationAddr);
+        stringIntegration = StringIntegration(_stringIntegrationAddr);
     }
 
     // Getters
@@ -44,7 +44,7 @@ contract NumericProcess {
         return (_questionIds, _questions);
     }
 
-    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (uint256) {
+    function getAnswerByAnswerer(uint256 _questionId, address answerer) external view returns (string memory) {
         return questions[_questionId].answers[answerer];
     }
 
@@ -65,12 +65,12 @@ contract NumericProcess {
         require(!questions[_questionId].isExists, "Question already exists");
         questionIds.push(_questionId);
         setQuestions(_questionId, _question);
-        emit NewNumericQuestion(_questionId, _question, address(this));
+        emit NewStringQuestion(_questionId, _question, address(this));
 
-        numericIntegration.dataIntergration(_questionId, _callBackAddress);
+        stringIntegration.dataIntergration(_questionId, _callBackAddress);
     }
 
-    function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
+    function answerQuestion(uint256 _questionId, string memory _answer, address _walletAddress) external {
         require(authentication.verifyUserIsRegistered(_walletAddress), "User does not registered");
         require(questions[_questionId].isExists, "Question does not exist");
         
