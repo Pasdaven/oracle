@@ -66,6 +66,8 @@ contract NumericProcess {
         questionIds.push(_questionId);
         setQuestions(_questionId, _question);
         emit NewNumericQuestion(_questionId, _question, address(this));
+
+        numericIntegration.dataIntergration(_questionId);
     }
 
     function answerQuestion(uint256 _questionId, uint256 _answer, address _walletAddress) external {
@@ -83,10 +85,5 @@ contract NumericProcess {
         if (!_alreadyAnswered) {
             questions[_questionId].answerers.push(_walletAddress);
         }
-    }
-
-    function callNumericIntegrationContract() external view {
-        uint256 result = numericIntegration.test();
-        console.log(result);
     }
 }
