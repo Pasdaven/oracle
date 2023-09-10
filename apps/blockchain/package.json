@@ -1,27 +1,27 @@
 {
-    "name": "oracle",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "dev": "npx hardhat node",
-        "test": "npx hardhat test",
-        "format": "npx prettier --write .",
-        "format-check": "npx prettier --check .",
-        "lint": "npx eslint . --ext .ts",
-        "build": "npx hardhat compile",
-        "deploy": "npx hardhat run scripts/deploy.ts --network localhost"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@nomicfoundation/hardhat-toolbox": "^2.0.2",
-        "@typescript-eslint/eslint-plugin": "^5.59.11",
-        "@typescript-eslint/parser": "^5.59.11",
-        "eslint": "^8.43.0",
-        "eslint-config-prettier": "^8.8.0",
-        "hardhat": "^2.14.1",
-        "prettier": "2.8.8"
-    }
+  "name": "oracle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx hardhat node",
+    "test": "npx hardhat test",
+    "format": "npx prettier --write .",
+    "format-check": "npx prettier --check .",
+    "lint": "npx eslint . --ext .ts",
+    "build": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.ts --network localhost"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "hardhat": "^2.14.1",
+    "prettier": "2.8.8"
+  }
 }

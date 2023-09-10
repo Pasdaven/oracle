@@ -2,157 +2,151 @@ import { ethers } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
 export async function deployContract(
-    contractName: string,
-    ...contractArgs: Contract[]
+  contractName: string,
+  ...contractArgs: Contract[]
 ): Promise<Contract> {
-    const ContractFactory: ContractFactory = await ethers.getContractFactory(
-        contractName
-    );
-    let contract: Contract;
+  const ContractFactory: ContractFactory = await ethers.getContractFactory(
+    contractName
+  );
+  let contract: Contract;
 
-    if (contractArgs.length) {
-        const contractParams: string[] = [];
-        for (const ca of contractArgs) {
-            contractParams.push(ca.address);
-        }
-        contract = await ContractFactory.deploy(...contractParams);
-    } else {
-        contract = await ContractFactory.deploy();
+  if (contractArgs.length) {
+    const contractParams: string[] = [];
+    for (const ca of contractArgs) {
+      contractParams.push(ca.address);
     }
+    contract = await ContractFactory.deploy(...contractParams);
+  } else {
+    contract = await ContractFactory.deploy();
+  }
 
-    await contract.deployed();
-    return contract;
+  await contract.deployed();
+  return contract;
 }
 
 export async function dataVerificationContract(): Promise<Contract> {
-    return await deployContract('DataVerification');
+  return await deployContract('DataVerification');
 }
 
 export async function nodeVotingContract(): Promise<Contract> {
-    return await deployContract('NodeVoting');
+  return await deployContract('NodeVoting');
 }
 
 export async function authenticationContract(): Promise<Contract> {
-    return await deployContract('Authentication');
+  return await deployContract('Authentication');
 }
 
 export async function numericIntegrationContract(
-    dataVerification?: Contract
+  dataVerification?: Contract
 ): Promise<Contract> {
-    if (typeof dataVerification === 'undefined') {
-        dataVerification = await dataVerificationContract();
-    }
-    return await deployContract('NumericIntegration', dataVerification);
+  if (typeof dataVerification === 'undefined') {
+    dataVerification = await dataVerificationContract();
+  }
+  return await deployContract('NumericIntegration', dataVerification);
 }
 
 export async function stringIntegrationContract(
-    nodeVoting?: Contract
+  nodeVoting?: Contract
 ): Promise<Contract> {
-    if (typeof nodeVoting === 'undefined') {
-        nodeVoting = await nodeVotingContract();
-    }
-    return await deployContract('StringIntegration', nodeVoting);
+  if (typeof nodeVoting === 'undefined') {
+    nodeVoting = await nodeVotingContract();
+  }
+  return await deployContract('StringIntegration', nodeVoting);
 }
 
 export async function numericProcessContract(
-    authentication?: Contract,
-    numericIntegration?: Contract
+  authentication?: Contract,
+  numericIntegration?: Contract
 ): Promise<Contract> {
-    if (typeof authentication === 'undefined') {
-        authentication = await authenticationContract();
-        numericIntegration = await numericIntegrationContract();
-    } else if (typeof numericIntegration === 'undefined') {
-        numericIntegration = await numericIntegrationContract();
-    }
-    return await deployContract(
-        'NumericProcess',
-        authentication,
-        numericIntegration
-    );
+  if (typeof authentication === 'undefined') {
+    authentication = await authenticationContract();
+    numericIntegration = await numericIntegrationContract();
+  } else if (typeof numericIntegration === 'undefined') {
+    numericIntegration = await numericIntegrationContract();
+  }
+  return await deployContract(
+    'NumericProcess',
+    authentication,
+    numericIntegration
+  );
 }
 
 export async function stringProcessContract(
-    authentication?: Contract,
-    stringIntegration?: Contract
+  authentication?: Contract,
+  stringIntegration?: Contract
 ): Promise<Contract> {
-    if (typeof authentication === 'undefined') {
-        authentication = await authenticationContract();
-        stringIntegration = await stringIntegrationContract();
-    } else if (typeof stringIntegration === 'undefined') {
-        stringIntegration = await stringIntegrationContract();
-    }
-    return await deployContract(
-        'StringProcess',
-        authentication,
-        stringIntegration
-    );
+  if (typeof authentication === 'undefined') {
+    authentication = await authenticationContract();
+    stringIntegration = await stringIntegrationContract();
+  } else if (typeof stringIntegration === 'undefined') {
+    stringIntegration = await stringIntegrationContract();
+  }
+  return await deployContract(
+    'StringProcess',
+    authentication,
+    stringIntegration
+  );
 }
 
 export async function provideEventContract(
-    numericProcess?: Contract,
-    stringProcess?: Contract
+  numericProcess?: Contract,
+  stringProcess?: Contract
 ): Promise<Contract> {
-    if (
-        typeof numericProcess === 'undefined' ||
-        typeof stringProcess === 'undefined'
-    ) {
-        const authentication = await authenticationContract();
-        numericProcess = await numericProcessContract(authentication);
-        stringProcess = await stringProcessContract(authentication);
-    }
-    return await deployContract('ProvideEvent', numericProcess, stringProcess);
+  if (
+    typeof numericProcess === 'undefined' ||
+    typeof stringProcess === 'undefined'
+  ) {
+    const authentication = await authenticationContract();
+    numericProcess = await numericProcessContract(authentication);
+    stringProcess = await stringProcessContract(authentication);
+  }
+  return await deployContract('ProvideEvent', numericProcess, stringProcess);
 }
 
 export async function controllerContract(
-    authentication?: Contract,
-    numericProcess?: Contract,
-    stringProcess?: Contract,
-    provideEvent?: Contract
+  authentication?: Contract,
+  numericProcess?: Contract,
+  stringProcess?: Contract,
+  provideEvent?: Contract
 ): Promise<Contract> {
-    if (typeof authentication === 'undefined') {
-        authentication = await authenticationContract();
-        numericProcess = await numericProcessContract(authentication);
-        stringProcess = await stringProcessContract(authentication);
-        provideEvent = await provideEventContract(
-            numericProcess,
-            stringProcess
-        );
-    } else if (
-        typeof numericProcess === 'undefined' ||
-        typeof stringProcess === 'undefined' ||
-        typeof provideEvent === 'undefined'
-    ) {
-        numericProcess = await numericProcessContract(authentication);
-        stringProcess = await stringProcessContract(authentication);
-        provideEvent = await provideEventContract(
-            numericProcess,
-            stringProcess
-        );
-    }
-    return await deployContract(
-        'Controller',
-        authentication,
-        numericProcess,
-        stringProcess,
-        provideEvent
-    );
+  if (typeof authentication === 'undefined') {
+    authentication = await authenticationContract();
+    numericProcess = await numericProcessContract(authentication);
+    stringProcess = await stringProcessContract(authentication);
+    provideEvent = await provideEventContract(numericProcess, stringProcess);
+  } else if (
+    typeof numericProcess === 'undefined' ||
+    typeof stringProcess === 'undefined' ||
+    typeof provideEvent === 'undefined'
+  ) {
+    numericProcess = await numericProcessContract(authentication);
+    stringProcess = await stringProcessContract(authentication);
+    provideEvent = await provideEventContract(numericProcess, stringProcess);
+  }
+  return await deployContract(
+    'Controller',
+    authentication,
+    numericProcess,
+    stringProcess,
+    provideEvent
+  );
 }
 
 export async function oracleContract(
-    numericProcess?: Contract,
-    stringProcess?: Contract
+  numericProcess?: Contract,
+  stringProcess?: Contract
 ): Promise<Contract> {
-    if (
-        typeof numericProcess === 'undefined' ||
-        typeof stringProcess === 'undefined'
-    ) {
-        const authentication = await authenticationContract();
-        numericProcess = await numericProcessContract(authentication);
-        stringProcess = await stringProcessContract(authentication);
-    }
-    return await deployContract('Oracle', numericProcess, stringProcess);
+  if (
+    typeof numericProcess === 'undefined' ||
+    typeof stringProcess === 'undefined'
+  ) {
+    const authentication = await authenticationContract();
+    numericProcess = await numericProcessContract(authentication);
+    stringProcess = await stringProcessContract(authentication);
+  }
+  return await deployContract('Oracle', numericProcess, stringProcess);
 }
 
 export async function addressRecordContract(): Promise<Contract> {
-    return await deployContract('AddressRecord');
+  return await deployContract('AddressRecord');
 }

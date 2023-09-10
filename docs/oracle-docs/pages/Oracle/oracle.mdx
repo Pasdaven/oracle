@@ -14,13 +14,13 @@ The `processRequest` function is responsible for receiving a request with data f
 
 ##### Parameters
 
--   `requestData` (Data struct): The request data received from the DApp, including the callback address, data type, and question.
+- `requestData` (Data struct): The request data received from the DApp, including the callback address, data type, and question.
 
 ##### Modifies
 
--   `requestIndexToAddress`: Updates the mapping of request index to callback address.
--   `responses`: Adds the response object to the list of responses.
--   `requestIndexLength`: Increments the request index length.
+- `requestIndexToAddress`: Updates the mapping of request index to callback address.
+- `responses`: Adds the response object to the list of responses.
+- `requestIndexLength`: Increments the request index length.
 
 #### Function: checkDataType
 
@@ -30,11 +30,11 @@ The `checkDataType` function is a pure function that validates the data type spe
 
 ##### Parameters
 
--   `_data` (Data struct): The request data containing the data type to be checked.
+- `_data` (Data struct): The request data containing the data type to be checked.
 
 ##### Returns
 
--   `response` (Response struct): The response object indicating the validity of the data type. It includes the status ("valid" or "invalid"), a message describing the status.
+- `response` (Response struct): The response object indicating the validity of the data type. It includes the status ("valid" or "invalid"), a message describing the status.
 
 #### Function: getCallbackAddressByIndex
 
@@ -44,8 +44,8 @@ The `getCallbackAddressByIndex` function is a view function that retrieves the c
 
 ##### Parameters
 
--   `_index` (uint256): The index of the mapping from which to retrieve the callback address.
+- `_index` (uint256): The index of the mapping from which to retrieve the callback address.
 
 ##### Returns
 
--   `address`: The callback address stored at the specified index in the `requestIndexToAddress` mapping.
+- `address`: The callback address stored at the specified index in the `requestIndexToAddress` mapping.

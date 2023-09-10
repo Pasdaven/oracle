@@ -12,8 +12,8 @@ The constructor initializes the String Process contract with the addresses of th
 
 ##### Parameters
 
--   `_authenticationAddr` (address): The address of the Authentication contract.
--   `_stringIntegrationAddr` (address): The address of the StringIntegration contract.
+- `_authenticationAddr` (address): The address of the Authentication contract.
+- `_stringIntegrationAddr` (address): The address of the StringIntegration contract.
 
 #### Function: getQuestions
 
@@ -23,12 +23,12 @@ The `getQuestions` function retrieves the list of available string questions for
 
 ##### Parameters
 
--   `_walletAddress` (address): The wallet address of the user.
+- `_walletAddress` (address): The wallet address of the user.
 
 ##### Returns
 
--   `_questionIds` (uint256[]): An array of question IDs.
--   `_questions` (string[]): An array of question descriptions.
+- `_questionIds` (uint256[]): An array of question IDs.
+- `_questions` (string[]): An array of question descriptions.
 
 #### Function: getAnswerByAnswerer
 
@@ -38,12 +38,12 @@ The `getAnswerByAnswerer` function retrieves the answer provided by a specific a
 
 ##### Parameters
 
--   `_questionId` (uint256): The question ID.
--   `answerer` (address): The address of the answerer.
+- `_questionId` (uint256): The question ID.
+- `answerer` (address): The address of the answerer.
 
 ##### Returns
 
--   `answer` (string): The answer provided by the answerer.
+- `answer` (string): The answer provided by the answerer.
 
 #### Function: getAnswerers
 
@@ -53,11 +53,11 @@ The `getAnswerers` function retrieves the list of answerers for a specific strin
 
 ##### Parameters
 
--   `_questionId` (uint256): The question ID.
+- `_questionId` (uint256): The question ID.
 
 ##### Returns
 
--   `answerers` (address[]): An array of answerers' wallet addresses.
+- `answerers` (address[]): An array of answerers' wallet addresses.
 
 #### Function: createEvent
 
@@ -67,12 +67,12 @@ The `createEvent` function creates a new string question event.
 
 ##### Parameters
 
--   `_questionId` (uint256): The question ID.
--   `_question` (string): The question description.
+- `_questionId` (uint256): The question ID.
+- `_question` (string): The question description.
 
 ##### Emits
 
--   `NewStringQuestion` (event): An event indicating the creation of a new string question.
+- `NewStringQuestion` (event): An event indicating the creation of a new string question.
 
 #### Function: answerQuestion
 
@@ -82,6 +82,6 @@ The `answerQuestion` function allows users to answer a specific string question.
 
 ##### Parameters
 
--   `_questionId` (uint256): The question ID.
--   `_answer` (string): The answer provided by the user.
--   `_walletAddress` (address): The wallet address of the user.
+- `_questionId` (uint256): The question ID.
+- `_answer` (string): The answer provided by the user.
+- `_walletAddress` (address): The wallet address of the user.
