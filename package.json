@@ -4,17 +4,12 @@
   "description": "A blockchain oracle platform built with Hardhat and Solidity.",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "apps/blockchain",
-    "apps/frontend",
-    "apps/sample-dapp/frontend",
-    "apps/sample-dapp/blockchain",
-    "docs/*"
-  ],
+  "packageManager": "pnpm@8.7.4",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "deploy": "turbo run deploy",
+    "contract:deploy": "turbo run deploy",
     "lint": "turbo run lint",
     "format-check": "turbo run format-check",
     "format": "turbo run format",
