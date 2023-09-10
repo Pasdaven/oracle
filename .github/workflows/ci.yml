@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
     types: [opened, synchronize]
 
@@ -26,20 +26,20 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: 16
-          cache: "npm"
+          node-version: 18
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm i
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: Lint check
-        run: npm run lint
+        run: pnpm lint
 
       - name: Format check
-        run: npm run format-check
+        run: pnpm format-check
 
       - name: Unit test
-        run: npm run test
+        run: pnpm test
