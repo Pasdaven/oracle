@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useOracle } from './util/use-oracle';
-import { useBlockchain } from './util/use-blockchain';
+import { useOracle } from './hooks/use-oracle';
+import { useBlockchain } from './hooks/use-blockchain';
 
 const AppPage = () => {
   const { askOracle, subscribeOracle } = useOracle();

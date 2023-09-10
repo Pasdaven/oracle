@@ -5,7 +5,7 @@ import App from '../../../blockchain/artifacts/contracts/App.sol/App.json';
 const web3 = new Web3('http://localhost:8545');
 
 const AppABI = App.abi;
-const appAddress = '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82';
+const appAddress = import.meta.env.VITE_APP_CONTRACT_ADDRESS;
 const app = new web3.eth.Contract(AppABI as AbiItem[], appAddress);
 
 const useBlockchain = () => {
