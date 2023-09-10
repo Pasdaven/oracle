@@ -12,6 +12,9 @@
         "dev": {
             "cache": false
         },
+        "deploy": {
+            "outputs": ["artifacts/**"]
+        },
         "format-check": {
             "outputs": []
         },

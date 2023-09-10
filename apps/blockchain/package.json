@@ -10,7 +10,7 @@
         "format-check": "npx prettier --check .",
         "lint": "npx eslint . --ext .ts",
         "build": "npx hardhat compile",
-        "deploy": "npx hardhat run scripts/deploy.ts --network ganache"
+        "deploy": "npx hardhat run scripts/deploy.ts --network localhost"
     },
     "keywords": [],
     "author": "",

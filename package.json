@@ -5,14 +5,16 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
+    "apps/blockchain",
     "apps/frontend",
     "apps/sample-dapp/frontend",
+    "apps/sample-dapp/blockchain",
     "docs/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "oracle:deploy": "cd apps/blockchain && npm run deploy && cd ../..",
+    "contract:deploy": "turbo run deploy",
     "lint": "turbo run lint",
     "format-check": "turbo run format-check",
     "format": "turbo run format",

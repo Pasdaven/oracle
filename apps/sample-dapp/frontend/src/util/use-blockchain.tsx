@@ -2,10 +2,10 @@ import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import App from '../../../blockchain/artifacts/contracts/App.sol/App.json';
 
-const web3 = new Web3('http://localhost:7545');
+const web3 = new Web3('http://localhost:8545');
 
 const AppABI = App.abi;
-const appAddress = '0x1Aa4dBb6C851E1b90df06D328e875AB1041a70aD';
+const appAddress = '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82';
 const app = new web3.eth.Contract(AppABI as AbiItem[], appAddress);
 
 const useBlockchain = () => {
