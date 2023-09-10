@@ -13,7 +13,8 @@
             "cache": false
         },
         "deploy": {
-            "outputs": ["artifacts/**"]
+            "cache": false,
+            "outputs": ["artifacts/**", "cache/**"]
         },
         "format-check": {
             "outputs": []

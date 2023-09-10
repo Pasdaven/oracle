@@ -10,12 +10,12 @@ const AppPage = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await askOracle({
+      await askOracle({
         dataType: 'String',
         question: question,
         callBackAddress: callbackAddress,
       });
-      console.log(res);
+      console.log('Ask oracle success!');
     } catch (error) {
       console.error('oracle error:', error);
     }

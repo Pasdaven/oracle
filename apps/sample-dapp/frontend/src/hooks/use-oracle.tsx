@@ -33,7 +33,7 @@ const useOracle = () => {
   };
 
   const subscribeOracle = () => {
-    console.log('Subscribe to Oracle success');
+    console.log('Subscribe to Oracle...');
     // callback.events
     //   .receiveEvent()
     //   .on('data', (event: any) => {
