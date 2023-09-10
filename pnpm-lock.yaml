@@ -141,18 +141,12 @@ importers:
 
   apps/sample-dapp/frontend:
     dependencies:
-      oracle:
-        specifier: '*'
-        version: link:../../blockchain
       react:
         specifier: ^18.2.0
         version: 18.2.0
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
-      sample-dapp-blockchain:
-        specifier: '*'
-        version: link:../blockchain
       web3:
         specifier: ^1.9.0
         version: 1.9.0
