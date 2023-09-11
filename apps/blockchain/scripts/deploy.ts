@@ -20,7 +20,8 @@ async function main() {
     numericProcess,
     stringProcess
   );
-  await deploy.controllerContract(
+  
+  const controller = await deploy.controllerContract(
     authentication,
     numericProcess,
     stringProcess,
@@ -28,6 +29,7 @@ async function main() {
   );
   const oracle = await deploy.oracleContract(numericProcess, stringProcess);
   console.log('Oracle deployed to:', oracle.address);
+  console.log('Controller deployed to:', controller.address);
 
   const addressRecord = await deploy.addressRecordContract();
   addressRecord.setLatestDeployAddress(oracle.address);
