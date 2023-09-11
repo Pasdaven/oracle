@@ -1,6 +1,6 @@
 'use client';
 
-import { useController } from '@/lib/stringEvent';
+import { useController } from '@/lib/string-event';
 import { useState } from 'react';
 
 export default function StringEventPage() {
