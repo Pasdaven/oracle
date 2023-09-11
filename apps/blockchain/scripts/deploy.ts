@@ -20,7 +20,7 @@ async function main() {
     numericProcess,
     stringProcess
   );
-  
+
   const controller = await deploy.controllerContract(
     authentication,
     numericProcess,
