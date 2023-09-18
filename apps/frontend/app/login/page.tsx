@@ -10,11 +10,9 @@ export default function WalletPage() {
 
   useEffect(() => {
     const checkLogin = async () => {
-      const accounts = await window.ethereum.request<string[]>({
-        method: 'eth_accounts',
-      });
-      if (accounts && accounts.length > 0) {
-        setAccount(accounts[0] || '');
+      const accounts = window.ethereum.selectedAddress;
+      if (accounts) {
+        setAccount(accounts || '');
       } else {
         setAccount('');
       }
