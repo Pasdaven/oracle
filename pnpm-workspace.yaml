@@ -1,0 +1,5 @@
+packages:
+  - 'apps/blockchain'
+  - 'apps/frontend'
+  - 'apps/sample-dapp/**'
+  - 'docs/*'

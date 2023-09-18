@@ -1,0 +1,87 @@
+---
+description: Oracle Project Documentation.
+---
+
+# Oracle Project Documentation
+
+### String Process Contract
+
+#### Constructor
+
+The constructor initializes the String Process contract with the addresses of the Authentication and StringIntegration contracts.
+
+##### Parameters
+
+- `_authenticationAddr` (address): The address of the Authentication contract.
+- `_stringIntegrationAddr` (address): The address of the StringIntegration contract.
+
+#### Function: getQuestions
+
+##### Description
+
+The `getQuestions` function retrieves the list of available string questions for a registered user.
+
+##### Parameters
+
+- `_walletAddress` (address): The wallet address of the user.
+
+##### Returns
+
+- `_questionIds` (uint256[]): An array of question IDs.
+- `_questions` (string[]): An array of question descriptions.
+
+#### Function: getAnswerByAnswerer
+
+##### Description
+
+The `getAnswerByAnswerer` function retrieves the answer provided by a specific answerer for a given string question.
+
+##### Parameters
+
+- `_questionId` (uint256): The question ID.
+- `answerer` (address): The address of the answerer.
+
+##### Returns
+
+- `answer` (string): The answer provided by the answerer.
+
+#### Function: getAnswerers
+
+##### Description
+
+The `getAnswerers` function retrieves the list of answerers for a specific string question.
+
+##### Parameters
+
+- `_questionId` (uint256): The question ID.
+
+##### Returns
+
+- `answerers` (address[]): An array of answerers' wallet addresses.
+
+#### Function: createEvent
+
+##### Description
+
+The `createEvent` function creates a new string question event.
+
+##### Parameters
+
+- `_questionId` (uint256): The question ID.
+- `_question` (string): The question description.
+
+##### Emits
+
+- `NewStringQuestion` (event): An event indicating the creation of a new string question.
+
+#### Function: answerQuestion
+
+##### Description
+
+The `answerQuestion` function allows users to answer a specific string question.
+
+##### Parameters
+
+- `_questionId` (uint256): The question ID.
+- `_answer` (string): The answer provided by the user.
+- `_walletAddress` (address): The wallet address of the user.

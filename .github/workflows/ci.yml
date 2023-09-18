@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
     types: [opened, synchronize]
 
@@ -23,23 +23,26 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.4.0
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "npm"
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm i
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: Lint check
-        run: npm run lint
+        run: pnpm lint
 
       - name: Format check
-        run: npm run format-check
+        run: pnpm format-check
 
       - name: Unit test
-        run: npm run test
+        run: pnpm test

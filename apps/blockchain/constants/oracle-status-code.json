@@ -1,66 +1,66 @@
 {
-    "Client": {
-        "AUTHORIZED": {
-            "code": 501,
-            "message": "AUTHORIZED"
-        },
-        "UNAUTHORIZED": {
-            "code": 502,
-            "message": "UNAUTHORIZED"
-        },
-        "QUESTION_NOT_EXIST": {
-            "code": 503,
-            "message": "QUESTION_NOT_EXIST"
-        },
-        "QUESTION_CREATED_SUCCESS": {
-            "code": 504,
-            "message": "QUESTION_CREATED_SUCCESS"
-        },
-        "QUESTION_CREATED_FAILURE": {
-            "code": 505,
-            "message": "QUESTION_CREATED_FAILURE"
-        },
-        "QUESTION_SUBMISSION_SUCCESS": {
-            "code": 506,
-            "message": "QUESTION_SUBMISSION_SUCCESS"
-        },
-        "QUESTION_SUBMISSION_FAILURE": {
-            "code": 507,
-            "message": "QUESTION_SUBMISSION_FAILURE"
-        }
+  "Client": {
+    "AUTHORIZED": {
+      "code": 501,
+      "message": "AUTHORIZED"
     },
-    "System": {
-        "VALID_DATA_TYPE": {
-            "code": 601,
-            "message": "VALID_DATA_TYPE"
-        },
-        "INVALID_DATA_TYPE": {
-            "code": 602,
-            "message": "INVALID_DATA_TYPE"
-        },
-        "VALID_DATA_FORMAT": {
-            "code": 603,
-            "message": "VALID_DATA_FORMAT"
-        },
-        "INVALID_DATA_FORMAT": {
-            "code": 604,
-            "message": "INVALID_DATA_FORMAT"
-        },
-        "VALID_CALLBACK_ADDRESS": {
-            "code": 605,
-            "message": "VALID_CALLBACK_ADDRESS"
-        },
-        "INVALID_CALLBACK_ADDRESS": {
-            "code": 606,
-            "message": "INVALID_CALLBACK_ADDRESS"
-        },
-        "QUESTION_ALREADY_EXIST": {
-            "code": 607,
-            "message": "QUESTION_ALREADY_EXIST"
-        },
-        "QUESTION_NOT_EXIST": {
-            "code": 608,
-            "message": "QUESTION_NOT_EXIST"
-        }
+    "UNAUTHORIZED": {
+      "code": 502,
+      "message": "UNAUTHORIZED"
+    },
+    "QUESTION_NOT_EXIST": {
+      "code": 503,
+      "message": "QUESTION_NOT_EXIST"
+    },
+    "QUESTION_CREATED_SUCCESS": {
+      "code": 504,
+      "message": "QUESTION_CREATED_SUCCESS"
+    },
+    "QUESTION_CREATED_FAILURE": {
+      "code": 505,
+      "message": "QUESTION_CREATED_FAILURE"
+    },
+    "QUESTION_SUBMISSION_SUCCESS": {
+      "code": 506,
+      "message": "QUESTION_SUBMISSION_SUCCESS"
+    },
+    "QUESTION_SUBMISSION_FAILURE": {
+      "code": 507,
+      "message": "QUESTION_SUBMISSION_FAILURE"
     }
+  },
+  "System": {
+    "VALID_DATA_TYPE": {
+      "code": 601,
+      "message": "VALID_DATA_TYPE"
+    },
+    "INVALID_DATA_TYPE": {
+      "code": 602,
+      "message": "INVALID_DATA_TYPE"
+    },
+    "VALID_DATA_FORMAT": {
+      "code": 603,
+      "message": "VALID_DATA_FORMAT"
+    },
+    "INVALID_DATA_FORMAT": {
+      "code": 604,
+      "message": "INVALID_DATA_FORMAT"
+    },
+    "VALID_CALLBACK_ADDRESS": {
+      "code": 605,
+      "message": "VALID_CALLBACK_ADDRESS"
+    },
+    "INVALID_CALLBACK_ADDRESS": {
+      "code": 606,
+      "message": "INVALID_CALLBACK_ADDRESS"
+    },
+    "QUESTION_ALREADY_EXIST": {
+      "code": 607,
+      "message": "QUESTION_ALREADY_EXIST"
+    },
+    "QUESTION_NOT_EXIST": {
+      "code": 608,
+      "message": "QUESTION_NOT_EXIST"
+    }
+  }
 }
