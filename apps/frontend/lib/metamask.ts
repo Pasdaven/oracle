@@ -37,3 +37,24 @@ export const connectWallet = async (
     }
   }
 };
+
+export const checkMetamaskLogin = async (): Promise<boolean> => {
+  if (!window.ethereum) {
+    return false; // Metamask not installed or not enabled
+  }
+
+  try {
+    const accounts = await window.ethereum.request<string[]>({
+      method: 'eth_accounts',
+    });
+
+    if (accounts && accounts.length > 0) {
+      return true; // Metamask is login
+    } else {
+      return false; // Metamask is not login
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
