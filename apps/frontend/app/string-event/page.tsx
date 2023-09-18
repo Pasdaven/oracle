@@ -1,8 +1,8 @@
 'use client';
 
-import { useController } from '@/lib/string-event';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getStringEvent as fetchStringEvent } from '@/lib/oracle';
 import { checkMetamaskLogin } from '@/lib/metamask';
 
 export default function StringEventPage() {
@@ -24,11 +24,15 @@ export default function StringEventPage() {
 
   const [event, setEvent] = useState<string>('');
 
-  const { getStringEvent } = useController();
-
-  const handleGetStringEvent = async () => {
-    const event = await getStringEvent();
-    setEvent(event);
+  
+  const fetchData = async () => {
+    const metamaskAccount = window.ethereum.selectedAddress;
+    try {
+      const eventContent = await fetchStringEvent(metamaskAccount || '');
+      setEvent(eventContent);
+    } catch (error) {
+      console.error('發生錯誤：', error);
+    }
   };
 
   if (isLoading) return null; // wait for Metamask login to complete
@@ -41,7 +45,7 @@ export default function StringEventPage() {
       <div className="flex justify-center w-full py-5">
         <button
           className="px-4 py-2 rounded-md bg-purple-600 cursor-pointer hover:bg-purple-500 text-xl font-semibold duration-100 text-white"
-          onClick={handleGetStringEvent}
+          onClick={fetchData}
         >
           Get String Event
         </button>
