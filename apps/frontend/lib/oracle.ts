@@ -21,8 +21,13 @@ const getContract = async () => {
 
 export const authenticate = async (walletAddress: string) => {
   const contract = await getContract();
-  const request = await contract.auth(walletAddress);
-  return request;
+  const request = await contract.auth(walletAddress, {
+    gasLimit: 1000000,
+    gasPrice: 1000000000,
+  });
+  const response = await request.wait();
+  console.log(response);
+  return response;
 };
 
 export const getNumericEvent = async (walletAddress: string) => {
