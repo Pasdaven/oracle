@@ -1,9 +1,27 @@
 'use client';
 
 import { useController } from '@/lib/string-event';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { checkMetamaskLogin } from '@/lib/metamask';
 
 export default function StringEventPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      const isLoggedIn = await checkMetamaskLogin();
+      if (!isLoggedIn) {
+        router.push('/login'); // redirect to login page
+      } else {
+        setIsLoading(false); // Metamask login is complete
+      }
+    };
+
+    checkLogin();
+  }, [router]);
+
   const [event, setEvent] = useState<string>('');
 
   const { getStringEvent } = useController();
@@ -12,6 +30,8 @@ export default function StringEventPage() {
     const event = await getStringEvent();
     setEvent(event);
   };
+
+  if (isLoading) return null; // wait for Metamask login to complete
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
