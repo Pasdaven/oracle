@@ -19,7 +19,7 @@ export default function WalletPage() {
     };
 
     checkLogin();
-  });
+  }, []);
 
   const handleConnectWallet = async () => {
     setIsSubmit(true);
