@@ -1,14 +1,27 @@
 'use client';
 
 import { connectWallet } from '@/lib/metamask';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function WalletPage() {
   const [account, setAccount] = useState('');
   const [error, setError] = useState('');
   const [isSubmit, setIsSubmit] = useState(false);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    const checkLogin = async () => {
+      const accounts = window.ethereum.selectedAddress;
+      if (accounts) {
+        setAccount(accounts || '');
+      } else {
+        setAccount('');
+      }
+    };
+
+    checkLogin();
+  }, []);
+
+  const handleConnectWallet = async () => {
     setIsSubmit(true);
     await connectWallet(setError, setAccount);
   };
@@ -26,10 +39,10 @@ export default function WalletPage() {
             </p>
           </div>
         )}
-        {!isSubmit && (
+        {!isSubmit && !account && (
           <button
             className="px-4 py-2 rounded-md bg-purple-600 cursor-pointer hover:bg-purple-500 text-xl font-semibold duration-100 text-white"
-            onClick={handleSubmit}
+            onClick={handleConnectWallet}
           >
             Connect
           </button>
