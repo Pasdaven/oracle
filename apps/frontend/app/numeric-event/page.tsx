@@ -24,7 +24,6 @@ export default function NumberEventPage() {
 
   const [event, setEvent] = useState<string>('');
 
-  
   const fetchData = async () => {
     const metamaskAccount = window.ethereum.selectedAddress;
     try {
