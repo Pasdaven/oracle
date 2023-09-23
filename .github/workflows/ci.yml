@@ -34,15 +34,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
-
-      - name: Build
-        run: pnpm build
-
+        
       - name: Lint check
         run: pnpm lint
 
       - name: Format check
         run: pnpm format-check
+
+      - name: Build
+        run: pnpm build
 
       - name: Unit test
         run: pnpm test

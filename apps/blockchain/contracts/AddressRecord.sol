@@ -10,4 +10,8 @@ contract AddressRecord {
     latestAddressRecord.push(latestDeployAddress);
     return 'success';
   }
+
+  function getLatestDeployAddress() external view returns (address) {
+    return latestAddressRecord[latestAddressRecord.length - 1];
+  }
 }

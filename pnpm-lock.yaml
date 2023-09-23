@@ -22,6 +22,10 @@ importers:
         version: 1.10.3
 
   apps/blockchain:
+    dependencies:
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
     devDependencies:
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^2.0.2
@@ -4258,6 +4262,11 @@ packages:
 
   /dompurify@3.0.5:
     resolution: {integrity: sha512-F9e6wPGtY+8KNMRAVfxeCOHU0/NPWMSENNq4pQctuXRqqdEPW7q3CrLbR5Nse044WwacyjHGOMlvNsBe1y6z9A==}
+    dev: false
+
+  /dotenv@16.3.1:
+    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /ecc-jsbn@0.1.2:
