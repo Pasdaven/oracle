@@ -20,6 +20,10 @@
       "cache": false,
       "outputs": ["artifacts/**", "cache/**"]
     },
+    "deploy-addressRecord": {
+      "cache": false,
+      "outputs": ["artifacts/**", "cache/**"]
+    },
     "format-check": {
       "outputs": []
     },
