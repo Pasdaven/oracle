@@ -24,57 +24,39 @@ contract Controller {
     provideEvent = ProvideEvent(addressOfProvideEventContract);
   }
 
-  function auth(address walletAddress) external returns (string memory) {
-    try authentication.register(walletAddress) {
-      return 'success';
-    } catch {
-      return 'invalid';
-    }
-  }
-
   function getNumericEvent(
     address walletAddress
-  ) external view returns (string memory) {
-    try provideEvent.getNumericQuestions(walletAddress) {
-      return 'success';
-    } catch {
-      return 'invalid';
-    }
+  ) external view returns (uint256[] memory, string[] memory) {
+    (uint256[] memory _questionIds, string[] memory _questions) = provideEvent
+      .getNumericQuestions(walletAddress);
+    return (_questionIds, _questions);
   }
 
   function getStringEvent(
     address walletAddress
-  ) external view returns (string memory) {
-    try provideEvent.getStringQuestions(walletAddress) {
-      return 'success';
-    } catch {
-      return 'invalid';
-    }
+  ) external view returns (uint256[] memory, string[] memory) {
+    (uint256[] memory _questionIds, string[] memory _questions) = provideEvent
+      .getStringQuestions(walletAddress);
+    return (_questionIds, _questions);
   }
 
   function answerNumericQuestion(
     uint256 questionId,
     uint256 answerContent,
     address walletAddress
-  ) external returns (string memory) {
-    try
-      numericProcess.answerQuestion(questionId, answerContent, walletAddress)
-    {
-      return 'success';
-    } catch {
-      return 'invalid';
-    }
+  ) external {
+    numericProcess.answerQuestion(questionId, answerContent, walletAddress);
   }
 
   function answerStringQuestion(
     uint256 questionId,
     string memory answerContent,
     address walletAddress
-  ) external returns (string memory) {
-    try stringProcess.answerQuestion(questionId, answerContent, walletAddress) {
-      return 'success';
-    } catch {
-      return 'invalid';
-    }
+  ) external {
+    stringProcess.answerQuestion(questionId, answerContent, walletAddress);
+  }
+
+  function auth(address walletAddress) external returns (string memory) {
+    authentication.register(walletAddress);
   }
 }
