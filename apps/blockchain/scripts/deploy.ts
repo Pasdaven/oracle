@@ -37,7 +37,7 @@ async function main() {
   console.log('Controller deployed to:', controller.address);
 
   const addressRecordAddress = process.env.ADDRESS_RECORD_CONTRACT_ADDRESS; // Replace with the actual address of your AddressRecord contract
-  const providerUrl = 'http://127.0.0.1:8545/'; // Replace with your Ethereum JSON-RPC URL
+  const providerUrl = process.env.PROVIDER_URL; // Replace with your Ethereum JSON-RPC URL
   const provider = new ethers.providers.JsonRpcProvider(providerUrl);
   const signer = provider.getSigner();
   const addressRecord = new ethers.Contract(
