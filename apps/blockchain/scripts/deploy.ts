@@ -1,4 +1,9 @@
+import { ethers } from 'hardhat';
+import dotenv from 'dotenv';
 import * as deploy from '../lib/deploy';
+import addressRecordAbi from '../artifacts/contracts/AddressRecord.sol/AddressRecord.json';
+
+dotenv.config();
 
 async function main() {
   const dataVerification = await deploy.dataVerificationContract();
@@ -31,8 +36,17 @@ async function main() {
   console.log('Oracle deployed to:', oracle.address);
   console.log('Controller deployed to:', controller.address);
 
-  const addressRecord = await deploy.addressRecordContract();
-  addressRecord.setLatestDeployAddress(oracle.address);
+  const addressRecordAddress = process.env.ADDRESS_RECORD_CONTRACT_ADDRESS; // Replace with the actual address of your AddressRecord contract
+  const providerUrl = process.env.PROVIDER_URL; // Replace with your Ethereum JSON-RPC URL
+  const provider = new ethers.providers.JsonRpcProvider(providerUrl);
+  const signer = provider.getSigner();
+  const addressRecord = new ethers.Contract(
+    addressRecordAddress as string,
+    addressRecordAbi.abi,
+    signer
+  );
+  await addressRecord.setLatestDeployAddress(oracle.address);
+  await addressRecord.getLatestDeployAddress();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
