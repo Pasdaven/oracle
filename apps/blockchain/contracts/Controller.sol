@@ -1,62 +1,89 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+import './DataManager.sol';
+import './Authentication.sol';
+import './DataVerification.sol';
+import './NodeVoting.sol';
+import './NumericIntegration.sol';
+import './StringFiltering.sol';
 import './NumericProcess.sol';
 import './StringProcess.sol';
-import './Authentication.sol';
-import './ProvideEvent.sol';
 
 contract Controller {
+  // Variables
+  DataManager private dataManager;
   Authentication private authentication;
+  DataVerification private dataVerification;
+  NodeVoting private nodeVoting;
+  NumericIntegration private numericIntegration;
+  StringFiltering private stringFiltering;
   NumericProcess private numericProcess;
   StringProcess private stringProcess;
-  ProvideEvent private provideEvent;
 
+  // Constructor
   constructor(
-    address addressOfAuthContract,
-    address addressOfNumericContract,
-    address addressOfStringContract,
-    address addressOfProvideEventContract
+    address _dataManagerAddr,
+    address _authenticationAddr,
+    address _dataVerificationAddr,
+    address _nodeVotingAddr,
+    address _numericIntegrationAddr,
+    address _stringFilteringAddr,
+    address _numericProcessAddr,
+    address _stringProcessAddr
   ) {
-    authentication = Authentication(addressOfAuthContract);
-    numericProcess = NumericProcess(addressOfNumericContract);
-    stringProcess = StringProcess(addressOfStringContract);
-    provideEvent = ProvideEvent(addressOfProvideEventContract);
+    dataManager = DataManager(_dataManagerAddr);
+    authentication = Authentication(_authenticationAddr);
+    dataVerification = DataVerification(_dataVerificationAddr);
+    nodeVoting = NodeVoting(_nodeVotingAddr);
+    numericIntegration = NumericIntegration(_numericIntegrationAddr);
+    stringFiltering = StringFiltering(_stringFilteringAddr);
+    numericProcess = NumericProcess(_numericProcessAddr);
+    stringProcess = StringProcess(_stringProcessAddr);
   }
 
+  // Functions
   function getNumericEvent(
-    address walletAddress
+    address _walletAddress
   ) external view returns (uint256[] memory, string[] memory) {
-    (uint256[] memory _questionIds, string[] memory _questions) = provideEvent
-      .getNumericQuestions(walletAddress);
-    return (_questionIds, _questions);
+    require(
+      authentication.verifyUserIsRegistered(_walletAddress),
+      'User does not registered'
+    );
+    return numericProcess.getQuestions();
   }
 
   function getStringEvent(
-    address walletAddress
+    address _walletAddress
   ) external view returns (uint256[] memory, string[] memory) {
-    (uint256[] memory _questionIds, string[] memory _questions) = provideEvent
-      .getStringQuestions(walletAddress);
-    return (_questionIds, _questions);
+    require(
+      authentication.verifyUserIsRegistered(_walletAddress),
+      'User does not registered'
+    );
+    return stringProcess.getQuestions();
   }
 
   function answerNumericQuestion(
-    uint256 questionId,
-    uint256 answerContent,
-    address walletAddress
+    uint256 _questionId,
+    uint256 _answer,
+    address _walletAddress
   ) external {
-    numericProcess.answerQuestion(questionId, answerContent, walletAddress);
+    require(
+      authentication.verifyUserIsRegistered(_walletAddress),
+      'User does not registered'
+    );
+    numericIntegration.answerQuestion(_questionId, _answer, _walletAddress);
   }
 
   function answerStringQuestion(
-    uint256 questionId,
-    string memory answerContent,
-    address walletAddress
+    uint256 _questionId,
+    string memory _answer,
+    address _walletAddress
   ) external {
-    stringProcess.answerQuestion(questionId, answerContent, walletAddress);
+    // stringFiltering.answerQuestion(_questionId, _answer, _walletAddress);
   }
 
-  function auth(address walletAddress) external returns (string memory) {
-    authentication.register(walletAddress);
+  function auth(address _walletAddress) external returns (bool) {
+    return authentication.register(_walletAddress);
   }
 }
