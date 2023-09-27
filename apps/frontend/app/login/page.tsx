@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import Image from 'next/image';
 import { connectWallet } from '@/lib/metamask';
 import { useEffect, useState } from 'react';
@@ -10,28 +12,31 @@ import { Alert } from '@/components/ui/alert';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 export default function WalletPage() {
+  const router = useRouter();
   const [account, setAccount] = useState('');
   const [error, setError] = useState('');
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkLogin = async () => {
       if (!window.ethereum) return;
       const accounts = window.ethereum.selectedAddress;
       if (accounts) {
-        setAccount(accounts || '');
+        router.push('/dashboard');
       } else {
         setAccount('');
+        setIsLoading(false); // Metamask login is complete
       }
     };
 
     checkLogin();
-  }, []);
+  }, [account, router]);
 
   const handleConnectWallet = async () => {
-    setIsSubmit(true);
     await connectWallet(setError, setAccount);
   };
+
+  if (isLoading) return null; // wait for Metamask login to complete
 
   return (
     <>
@@ -102,7 +107,7 @@ export default function WalletPage() {
                       Please Install Metamask
                     </span>
                     <span className="hidden group-hover:block">
-                      click to close
+                      Click To Close
                     </span>
                   </Alert>
                 </div>
@@ -118,7 +123,7 @@ export default function WalletPage() {
                       Metamask Connect Error
                     </span>
                     <span className="hidden group-hover:block">
-                      click to close
+                      Click To Close
                     </span>
                   </Alert>
                 </div>
