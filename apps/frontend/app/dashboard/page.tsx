@@ -33,7 +33,7 @@ export default function DashboardPage() {
         setWalletAddress(window.ethereum.selectedAddress || '');
       }
     };
-    
+
     checkLogin();
     setIsLoading(false); // Metamask login is complete
   }, [router]);

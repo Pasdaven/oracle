@@ -28,7 +28,7 @@ export default function WalletPage() {
         setAccount('');
       }
     };
-    
+
     checkLogin();
     setIsLoading(false); // Metamask login is complete
   }, [account, router]);
