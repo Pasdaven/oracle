@@ -15,9 +15,10 @@ export default function WalletPage() {
   const router = useRouter();
   const [account, setAccount] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true); // Metamask login is in progress
     const checkLogin = async () => {
       if (!window.ethereum) return;
       const accounts = window.ethereum.selectedAddress;
@@ -25,18 +26,18 @@ export default function WalletPage() {
         router.push('/dashboard');
       } else {
         setAccount('');
-        setIsLoading(false); // Metamask login is complete
       }
     };
-
+    
     checkLogin();
+    setIsLoading(false); // Metamask login is complete
   }, [account, router]);
 
   const handleConnectWallet = async () => {
     await connectWallet(setError, setAccount);
   };
 
-  if (isLoading) return null; // wait for Metamask login to complete
+  if (isLoading) return <></>; // wait for Metamask login to complete
 
   return (
     <>
@@ -85,7 +86,7 @@ export default function WalletPage() {
                   onClick={handleConnectWallet}
                 >
                   <Image
-                    src="/images/metamask-fox.png"
+                    src="/images/metamask-fox.svg"
                     width={25}
                     height={25}
                     alt="Metamask Fox"

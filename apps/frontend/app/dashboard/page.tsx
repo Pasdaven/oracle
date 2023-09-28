@@ -21,23 +21,24 @@ import { UserNav } from '@/components/user-nav';
 export default function DashboardPage() {
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true); // Metamask login is in progress
     const checkLogin = async () => {
       const isLoggedIn = await checkMetamaskLogin();
       if (!isLoggedIn) {
         router.push('/login'); // redirect to login page
       } else {
         setWalletAddress(window.ethereum.selectedAddress || '');
-        setIsLoading(false); // Metamask login is complete
       }
     };
-
+    
     checkLogin();
+    setIsLoading(false); // Metamask login is complete
   }, [router]);
 
-  if (isLoading) return null; // wait for Metamask login to complete
+  if (isLoading) return <></>; // wait for Metamask login to complete
 
   return (
     <>
