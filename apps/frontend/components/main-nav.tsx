@@ -33,22 +33,25 @@ export function MainNav({
       <div className="text-xl font-semibold">Oracle</div>
       <Link
         href="/dashboard"
-        className={`text-sm font-medium transition-colors hover:text-primary ${isActiveRoute('/dashboard') ? '' : 'text-muted-foreground'
-          }`}
+        className={`text-sm font-medium transition-colors hover:text-primary ${
+          isActiveRoute('/dashboard') ? '' : 'text-muted-foreground'
+        }`}
       >
         Overview
       </Link>
       <Link
         href="/numeric-event"
-        className={`text-sm font-medium transition-colors hover:text-primary ${isActiveRoute('/numeric-event') ? '' : 'text-muted-foreground'
-          }`}
+        className={`text-sm font-medium transition-colors hover:text-primary ${
+          isActiveRoute('/numeric-event') ? '' : 'text-muted-foreground'
+        }`}
       >
         Numeric Question
       </Link>
       <Link
         href="/string-event"
-        className={`text-sm font-medium transition-colors hover:text-primary ${isActiveRoute('/string-event') ? '' : 'text-muted-foreground'
-          }`}
+        className={`text-sm font-medium transition-colors hover:text-primary ${
+          isActiveRoute('/string-event') ? '' : 'text-muted-foreground'
+        }`}
       >
         String Question
       </Link>

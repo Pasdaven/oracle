@@ -6,7 +6,7 @@ import QuestionCard from '@/components/question-card';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import style from '../../styles/style.module.css'
+import style from '../../styles/style.module.css';
 import { getNumericEvent as fetchNumericEvent } from '@/lib/oracle';
 import { checkMetamaskLogin } from '@/lib/metamask';
 
@@ -31,7 +31,9 @@ export default function NumericEventPage() {
     const fetchData = async () => {
       const metamaskAccount = window.ethereum.selectedAddress;
       try {
-        const [questionIdsData, questionsData] = await fetchNumericEvent(metamaskAccount || '');
+        const [questionIdsData, questionsData] = await fetchNumericEvent(
+          metamaskAccount || ''
+        );
         setQuestionIds(questionIdsData.toString().split(','));
         setQuestions(questionsData);
       } catch (error) {
@@ -58,10 +60,17 @@ export default function NumericEventPage() {
           </div>
         </div>
         <div className="flex-1 space-y-4 px-28 my-6 h-[calc(100%-7rem)]">
-          <h2 className="text-3xl font-semibold tracking-wide">Numeric Question</h2>
+          <h2 className="text-3xl font-semibold tracking-wide">
+            Numeric Question
+          </h2>
           <div className={`pt-2 overflow-auto h-[90%] ${style.scroll}`}>
             {questions.map((question, index) => (
-              <QuestionCard key={questionIds[index]} question={question} questionId={questionIds[index]} progress={50} />
+              <QuestionCard
+                key={questionIds[index]}
+                question={question}
+                questionId={questionIds[index]}
+                progress={50}
+              />
             ))}
           </div>
         </div>
