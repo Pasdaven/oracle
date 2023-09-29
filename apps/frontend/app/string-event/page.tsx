@@ -3,6 +3,7 @@
 import { MainNav } from '@/components/main-nav';
 import { UserNav } from '@/components/user-nav';
 import QuestionCard from '@/components/question-card';
+import NoQuestionCard from '@/components/no-question-card';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -15,10 +16,9 @@ export default function StringEventPage() {
   const [walletAddress, setWalletAddress] = useState('');
   const [questions, setQuestions] = useState<string[]>([]);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true); // Metamask login is in progress
     const checkLogin = async () => {
       const isLoggedIn = await checkMetamaskLogin();
       if (!isLoggedIn) {
@@ -41,9 +41,13 @@ export default function StringEventPage() {
       }
     };
 
-    checkLogin();
-    setIsLoading(false); // Metamask login is complete
-    fetchData();
+    const fetchAllData = async () => {
+      await checkLogin();
+      await fetchData();
+      setIsLoading(false);
+    };
+
+    fetchAllData();
   }, [router]);
 
   if (isLoading) return <></>; // wait for Metamask login to complete
@@ -64,14 +68,20 @@ export default function StringEventPage() {
             String Question
           </h2>
           <div className={`pt-2 overflow-auto h-[90%] ${style.scroll}`}>
-            {questions.map((question, index) => (
-              <QuestionCard
-                key={questionIds[index]}
-                question={question}
-                questionId={questionIds[index]}
-                progress={50}
-              />
-            ))}
+            {questionIds.length == 0 ? (
+              <NoQuestionCard questionType="String" />
+            ) : (
+              questions.map((question, index) => (
+                <QuestionCard
+                  key={questionIds[index]}
+                  question={question}
+                  questionId={questionIds[index]}
+                  state="Answering"
+                  progress={50}
+                  timeLeft={10}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
