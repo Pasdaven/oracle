@@ -7,7 +7,6 @@ import NoQuestionCard from '@/components/no-question-card';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import style from '../../styles/style.module.css';
 import { getNumericEvent as fetchNumericEvent } from '@/lib/oracle';
 import { checkMetamaskLogin } from '@/lib/metamask';
 
@@ -69,7 +68,7 @@ export default function NumericEventPage() {
           <h2 className="text-3xl font-semibold tracking-wide">
             Numeric Question
           </h2>
-          <div className={`pt-2 overflow-auto h-[90%] ${style.scroll}`}>
+          <div className={`pt-2 overflow-auto h-[90%] no-scrollbar`}>
             {questionIds.length == 0 ? (
               <NoQuestionCard questionType="Numeric" />
             ) : (
