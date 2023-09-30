@@ -1,12 +1,20 @@
 'use client';
 
+import { MainNav } from '@/components/main-nav';
+import { UserNav } from '@/components/user-nav';
+import QuestionCard from '@/components/question-card';
+import NoQuestionCard from '@/components/no-question-card';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getNumericEvent as fetchNumericEvent } from '@/lib/oracle';
 import { checkMetamaskLogin } from '@/lib/metamask';
 
-export default function NumberEventPage() {
+export default function NumericEventPage() {
   const router = useRouter();
+  const [walletAddress, setWalletAddress] = useState('');
+  const [questions, setQuestions] = useState<string[]>([]);
+  const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,47 +23,67 @@ export default function NumberEventPage() {
       if (!isLoggedIn) {
         router.push('/login'); // redirect to login page
       } else {
-        setIsLoading(false); // Metamask login is complete
+        setWalletAddress(window.ethereum.selectedAddress || '');
       }
     };
 
-    checkLogin();
+    const fetchData = async () => {
+      const metamaskAccount = window.ethereum.selectedAddress;
+      try {
+        const [questionIdsData, questionsData] = await fetchNumericEvent(
+          metamaskAccount || ''
+        );
+        setQuestionIds(questionIdsData.toString().split(','));
+        setQuestions(questionsData);
+      } catch (error) {
+        console.error('發生錯誤：', error);
+      }
+    };
+
+    const fetchAllData = async () => {
+      await checkLogin();
+      await fetchData();
+      setIsLoading(false);
+    };
+
+    fetchAllData();
   }, [router]);
 
-  const [event, setEvent] = useState<string>('');
-
-  const fetchData = async () => {
-    const metamaskAccount = window.ethereum.selectedAddress;
-    try {
-      const eventContent = await fetchNumericEvent(metamaskAccount || '');
-      setEvent(eventContent);
-    } catch (error) {
-      console.error('發生錯誤：', error);
-    }
-  };
-
-  if (isLoading) return null; // wait for Metamask login to complete
+  if (isLoading) return <></>; // wait for Metamask login to complete
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      <div className="flex justify-center w-full">
-        <h1 className="text-4xl font-bold">Numeric Event</h1>
+    <>
+      <div className="flex-col md:flex h-screen">
+        <div className="border-b">
+          <div className="flex h-16 items-center px-4">
+            <MainNav className="mx-6" />
+            <div className="ml-auto flex items-center space-x-4 mx-6">
+              <UserNav walletAddress={walletAddress} />
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 space-y-4 px-28 my-6 h-[calc(100%-7rem)]">
+          <h2 className="text-3xl font-semibold tracking-wide">
+            Numeric Question
+          </h2>
+          <div className={`pt-2 overflow-auto h-[90%] no-scrollbar`}>
+            {questionIds.length == 0 ? (
+              <NoQuestionCard questionType="Numeric" />
+            ) : (
+              questions.map((question, index) => (
+                <QuestionCard
+                  key={questionIds[index]}
+                  question={question}
+                  questionId={questionIds[index]}
+                  state="Voting"
+                  progress={50}
+                  timeLeft={10}
+                />
+              ))
+            )}
+          </div>
+        </div>
       </div>
-      <div className="flex justify-center w-full py-5">
-        <button
-          className="px-4 py-2 rounded-md bg-purple-600 cursor-pointer hover:bg-purple-500 text-xl font-semibold duration-100 text-white"
-          onClick={fetchData}
-        >
-          Get Numeric Event
-        </button>
-      </div>
-      <div className="flex justify-center w-full py-5">
-        {event && (
-          <p className="px-4 py-2 rounded-md bg-purple-600 cursor-pointer hover:bg-purple-500 text-xl font-semibold duration-100 text-white">
-            {event}
-          </p>
-        )}
-      </div>
-    </main>
+    </>
   );
 }

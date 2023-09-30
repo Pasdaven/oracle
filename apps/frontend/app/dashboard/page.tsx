@@ -1,12 +1,10 @@
 'use client';
 
-import { Metadata } from 'next';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { checkMetamaskLogin } from '@/lib/metamask';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import { BrainCircuit, Rocket, DollarSign, Banknote } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MainNav } from '@/components/main-nav';
 import {
   Card,
   CardContent,
@@ -14,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MainNav } from '@/components/main-nav';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { UserNav } from '@/components/user-nav';
+import { Banknote, BrainCircuit, DollarSign, Rocket } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -46,14 +44,14 @@ export default function DashboardPage() {
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
             <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
+            <div className="ml-auto flex items-center space-x-4 mx-6">
               <UserNav walletAddress={walletAddress} />
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex-1 space-y-4 px-10 py-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-wide">Overview</h2>
+            <h2 className="text-3xl font-semibold tracking-wide">Overview</h2>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
             {/* <TabsList>
