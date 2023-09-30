@@ -4,8 +4,6 @@ pragma solidity ^0.8.9;
 import './DataManager.sol';
 
 contract Authentication {
-  // Events
-  event Register(bool isRegistered);
 
   // Variables
   DataManager private dataManager;
@@ -23,15 +21,11 @@ contract Authentication {
     return reputationScores[_walletAddress];
   }
 
-  function register(address _walletAddress) public returns (bool) {
+  function register(address _walletAddress) public {
     if (!verifyUserIsRegistered(_walletAddress)) {
       reputationScores[_walletAddress] = 100;
       dataManager.setUser(_walletAddress);
-      emit Register(true);
-      return true;
-    } else {
-      emit Register(false);
-      return false;
+      // call stake
     }
   }
 

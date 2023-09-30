@@ -83,7 +83,7 @@ contract Controller {
     // stringFiltering.answerQuestion(_questionId, _answer, _walletAddress);
   }
 
-  function auth(address _walletAddress) external returns (bool) {
-    return authentication.register(_walletAddress);
+  function auth(address _walletAddress) external {
+    authentication.register(_walletAddress);
   }
 }
