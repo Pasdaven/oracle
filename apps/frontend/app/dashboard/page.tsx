@@ -1,12 +1,10 @@
 'use client';
 
-import { Metadata } from 'next';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { checkMetamaskLogin } from '@/lib/metamask';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-import { BrainCircuit, Rocket, DollarSign, Banknote } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { MainNav } from '@/components/main-nav';
 import {
   Card,
   CardContent,
@@ -14,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MainNav } from '@/components/main-nav';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { UserNav } from '@/components/user-nav';
+import { Banknote, BrainCircuit, DollarSign, Rocket } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();

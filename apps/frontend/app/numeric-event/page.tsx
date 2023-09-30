@@ -17,8 +17,6 @@ export default function NumericEventPage() {
   const [questionIds, setQuestionIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log('isLoading', isLoading);
-
   useEffect(() => {
     const checkLogin = async () => {
       const isLoggedIn = await checkMetamaskLogin();

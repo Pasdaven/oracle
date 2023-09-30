@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ArrowRightCircle, CheckCircle2, Rocket, Timer } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import CountdownTimer from '@/components/countdown-timer';
 
@@ -21,6 +22,20 @@ const QuestionCard = ({
   progress,
   timeLeft,
 }: QuestionCardProps) => {
+  const [timeRemaining, setTimeRemaining] = useState(timeLeft);
+
+  useEffect(() => {
+    if (timeRemaining <= 0) {
+      return;
+    }
+
+    const timerId = setTimeout(() => {
+      setTimeRemaining(timeRemaining - 1);
+    }, 1000);
+
+    return () => clearTimeout(timerId);
+  }, [timeRemaining]);
+
   return (
     <div className="grid grid-cols-7 w-full h-fit rounded-xl border border-gray-200 px-8 py-4 mt-2">
       <div className="col-span-3 flex items-center">
@@ -46,7 +61,7 @@ const QuestionCard = ({
           <div className="flex justify-center w-full text-xs font-normal text-muted-foreground absolute py-1">
             <span>time left:</span>
             <div className="ml-1">
-              <CountdownTimer second={100} />
+              <CountdownTimer second={timeRemaining} />
             </div>
           </div>
         </div>
