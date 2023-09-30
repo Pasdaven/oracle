@@ -6,33 +6,52 @@ import addressRecordAbi from '../artifacts/contracts/AddressRecord.sol/AddressRe
 dotenv.config();
 
 async function main() {
-  const dataVerification = await deploy.dataVerificationContract();
-  const nodeVoting = await deploy.nodeVotingContract();
-  const authentication = await deploy.authenticationContract();
+  const dataManager = await deploy.dataManagerContract();
+  const countdownTimer = await deploy.countdownTimerContract();
+  const authentication = await deploy.authenticationContract(dataManager);
+  const dataVerification = await deploy.dataVerificationContract(
+    dataManager,
+    countdownTimer
+  );
+  const nodeVoting = await deploy.nodeVotingContract(
+    dataManager,
+    countdownTimer
+  );
   const numericIntegration = await deploy.numericIntegrationContract(
+    dataManager,
+    authentication,
     dataVerification
   );
-  const stringIntegration = await deploy.stringIntegrationContract(nodeVoting);
+  const stringFiltering = await deploy.stringFilteringContract(
+    dataManager,
+    nodeVoting
+  );
   const numericProcess = await deploy.numericProcessContract(
-    authentication,
+    dataManager,
+    countdownTimer,
     numericIntegration
   );
   const stringProcess = await deploy.stringProcessContract(
-    authentication,
-    stringIntegration
-  );
-  const provideEvent = await deploy.provideEventContract(
-    numericProcess,
-    stringProcess
+    dataManager,
+    countdownTimer,
+    stringFiltering
   );
 
   const controller = await deploy.controllerContract(
+    dataManager,
     authentication,
+    dataVerification,
+    nodeVoting,
+    numericIntegration,
+    stringFiltering,
     numericProcess,
-    stringProcess,
-    provideEvent
+    stringProcess
   );
-  const oracle = await deploy.oracleContract(numericProcess, stringProcess);
+  const oracle = await deploy.oracleContract(
+    dataManager,
+    numericProcess,
+    stringProcess
+  );
   console.log('Oracle deployed to:', oracle.address);
   console.log('Controller deployed to:', controller.address);
 
