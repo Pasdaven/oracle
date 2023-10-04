@@ -37,7 +37,9 @@ export default function DashboardPage() {
     const fetchData = async () => {
       const metamaskAccount = window.ethereum.selectedAddress;
       try {
-        const reputationScoresData = await getReputationScores(metamaskAccount || '');
+        const reputationScoresData = await getReputationScores(
+          metamaskAccount || ''
+        );
         setReputationScores(reputationScoresData.toString());
       } catch (error) {
         console.error('發生錯誤：', error);

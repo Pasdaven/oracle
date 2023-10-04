@@ -53,7 +53,7 @@ contract DataVerification {
         dataManager.setFinalNumericAnswer(_questionId, _finalAnswer);
         sendAnswerToDApp(_questionId, _callBackAddress, _finalAnswer);
         // call RewardPunishment contract to reward or punish
-        // questionId, isOutliers = false user 
+        // questionId, isOutliers = false user
       } else {
         // numericProcess.createQuestionEvent
       }

@@ -74,4 +74,4 @@ export const getReputationScores = async (walletAddress: string) => {
   const contract = await getContract();
   const request = await contract.getReputationScores(walletAddress);
   return request;
-}
+};

@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import './DataManager.sol';
 
 contract Authentication {
-
   // Variables
   DataManager private dataManager;
   mapping(address => uint256) public reputationScores;
