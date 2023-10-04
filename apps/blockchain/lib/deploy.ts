@@ -11,11 +11,15 @@ export async function deployContract(
   let contract: Contract;
 
   if (contractArgs.length) {
-    const contractParams: string[] = [];
-    for (const contractArg of contractArgs) {
-      contractParams.push(contractArg.address);
+    if (contractName === 'CountdownTimer') {
+      contract = await ContractFactory.deploy(contractArgs[0]);
+    } else {
+      const contractParams: string[] = [];
+      for (const contractArg of contractArgs) {
+        contractParams.push(contractArg.address);
+      }
+      contract = await ContractFactory.deploy(...contractParams);
     }
-    contract = await ContractFactory.deploy(...contractParams);
   } else {
     contract = await ContractFactory.deploy();
   }
