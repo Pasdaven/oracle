@@ -33,6 +33,7 @@ export default function NumericEventPage() {
         const [questionIdsData, questionsData] = await fetchNumericEvent(
           metamaskAccount || ''
         );
+        if (questionIdsData.length === 0) return;
         setQuestionIds(questionIdsData.toString().split(','));
         setQuestions(questionsData);
       } catch (error) {
