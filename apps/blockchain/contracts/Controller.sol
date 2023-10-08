@@ -86,4 +86,10 @@ contract Controller {
   function auth(address _walletAddress) external {
     authentication.register(_walletAddress);
   }
+
+  function getReputationScores(
+    address _walletAddress
+  ) external view returns (uint256) {
+    return authentication.getReputationScoresByAddress(_walletAddress);
+  }
 }
