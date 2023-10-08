@@ -33,6 +33,7 @@ export default function StringEventPage() {
         const [questionIdsData, questionsData] = await fetchStringEvent(
           metamaskAccount || ''
         );
+        if (questionIdsData.length === 0) return;
         setQuestionIds(questionIdsData.toString().split(','));
         setQuestions(questionsData);
       } catch (error) {

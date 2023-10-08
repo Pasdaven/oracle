@@ -4,6 +4,8 @@ import { checkMetamaskLogin } from '@/lib/metamask';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { getReputationScores } from '@/lib/oracle';
+
 import { MainNav } from '@/components/main-nav';
 import {
   Card,
@@ -19,10 +21,10 @@ import { Banknote, BrainCircuit, DollarSign, Rocket } from 'lucide-react';
 export default function DashboardPage() {
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [reputationScores, setReputationScores] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true); // Metamask login is in progress
     const checkLogin = async () => {
       const isLoggedIn = await checkMetamaskLogin();
       if (!isLoggedIn) {
@@ -32,8 +34,25 @@ export default function DashboardPage() {
       }
     };
 
-    checkLogin();
-    setIsLoading(false); // Metamask login is complete
+    const fetchData = async () => {
+      const metamaskAccount = window.ethereum.selectedAddress;
+      try {
+        const reputationScoresData = await getReputationScores(
+          metamaskAccount || ''
+        );
+        setReputationScores(reputationScoresData.toString());
+      } catch (error) {
+        console.error('發生錯誤：', error);
+      }
+    };
+
+    const fetchAllData = async () => {
+      await checkLogin();
+      await fetchData();
+      setIsLoading(false);
+    };
+
+    fetchAllData();
   }, [router]);
 
   if (isLoading) return <></>; // wait for Metamask login to complete
@@ -87,7 +106,7 @@ export default function DashboardPage() {
                     <Rocket />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold">100</div>
+                    <div className="text-3xl font-bold">{reputationScores}</div>
                   </CardContent>
                 </Card>
                 <Card>
