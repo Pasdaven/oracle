@@ -4,7 +4,7 @@ import { checkMetamaskLogin } from '@/lib/metamask';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { getReputationScores } from '@/lib/oracle';
+import { getReputationScores, getWalletBalance } from '@/lib/oracle';
 
 import { MainNav } from '@/components/main-nav';
 import {
@@ -22,6 +22,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [walletAddress, setWalletAddress] = useState('');
   const [reputationScores, setReputationScores] = useState('');
+  const [walletBalance, setWalletBalance] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -41,6 +42,9 @@ export default function DashboardPage() {
           metamaskAccount || ''
         );
         setReputationScores(reputationScoresData.toString());
+
+        const walletBalance = await getWalletBalance(metamaskAccount || '');
+        setWalletBalance(walletBalance ? walletBalance.toString() : '0');
       } catch (error) {
         console.error('發生錯誤：', error);
       }
@@ -86,7 +90,7 @@ export default function DashboardPage() {
                             </TabsTrigger>
                         </TabsList> */}
             <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 lg:grid-cols-3">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-base font-medium">
@@ -112,26 +116,13 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-base font-medium">
-                      Total Revenue
-                    </CardTitle>
-                    <DollarSign />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold">
-                      40 <span className="text-xs">ETH</span>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-base font-medium">
-                      Pledge
+                      Wallet Balance
                     </CardTitle>
                     <Banknote />
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      25 <span className="text-xs">ETH</span>
+                      {walletBalance} <span className="text-xs">ETH</span>
                     </div>
                   </CardContent>
                 </Card>
