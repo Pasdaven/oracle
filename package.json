@@ -19,7 +19,7 @@
   "devDependencies": {
     "eslint-config-custom": "*",
     "eslint": "8.43.0",
-    "prettier": "^2.5.1",
+    "prettier": "^3.0.3",
     "turbo": "^1.10.3"
   }
 }
