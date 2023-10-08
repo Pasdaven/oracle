@@ -13,10 +13,24 @@ const getSigner = async () => {
 
 const getContract = async () => {
   const signer = await getSigner();
-  const contractAddress = '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1';
+  const contractAddress = process.env.NEXT_PUBLIC_CONTROLLER_CONTRACT_ADDRESS as string;
   const contractABI = controllerAbi.abi;
   const contract = new Contract(contractAddress, contractABI, signer);
   return contract;
+};
+
+export const getWalletBalance = async (walletAddress: string) => {
+  try {
+    const signer = await getSigner();
+    const balanceWei: bigint = await signer.provider.getBalance(walletAddress);
+
+    const balanceEther = parseFloat(ethers.formatEther(balanceWei)).toFixed(4);
+
+    return balanceEther;
+  } catch (error) {
+    console.error('Error fetching wallet balance:', error);
+    return null;
+  }
 };
 
 export const authenticate = async (walletAddress: string) => {
@@ -67,5 +81,11 @@ export const answerStringQuestion = async (
     answerContent,
     walletAddress
   );
+  return request;
+};
+
+export const getReputationScores = async (walletAddress: string) => {
+  const contract = await getContract();
+  const request = await contract.getReputationScores(walletAddress);
   return request;
 };

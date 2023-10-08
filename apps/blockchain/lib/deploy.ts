@@ -11,11 +11,15 @@ export async function deployContract(
   let contract: Contract;
 
   if (contractArgs.length) {
-    const contractParams: string[] = [];
-    for (const ca of contractArgs) {
-      contractParams.push(ca.address);
+    if (contractName === 'CountdownTimer') {
+      contract = await ContractFactory.deploy(contractArgs[0]);
+    } else {
+      const contractParams: string[] = [];
+      for (const contractArg of contractArgs) {
+        contractParams.push(contractArg.address);
+      }
+      contract = await ContractFactory.deploy(...contractParams);
     }
-    contract = await ContractFactory.deploy(...contractParams);
   } else {
     contract = await ContractFactory.deploy();
   }
@@ -24,127 +28,237 @@ export async function deployContract(
   return contract;
 }
 
-export async function dataVerificationContract(): Promise<Contract> {
-  return await deployContract('DataVerification');
+export async function dataManagerContract(): Promise<Contract> {
+  return await deployContract('DataManager');
 }
 
-export async function nodeVotingContract(): Promise<Contract> {
-  return await deployContract('NodeVoting');
+export async function countdownTimerContract(): Promise<Contract> {
+  // 1 hour
+  return await deployContract('CountdownTimer', 3600);
 }
 
-export async function authenticationContract(): Promise<Contract> {
-  return await deployContract('Authentication');
+export async function authenticationContract(
+  dataManager?: Contract
+): Promise<Contract> {
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+  }
+  return await deployContract('Authentication', dataManager);
+}
+
+export async function dataVerificationContract(
+  dataManager?: Contract,
+  countdownTimer?: Contract
+): Promise<Contract> {
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    countdownTimer = await countdownTimerContract();
+  } else if (typeof countdownTimer === 'undefined') {
+    countdownTimer = await countdownTimerContract();
+  }
+  return await deployContract('DataVerification', dataManager, countdownTimer);
+}
+
+export async function nodeVotingContract(
+  dataManager?: Contract,
+  countdownTimer?: Contract,
+  dataVerification?: Contract
+): Promise<Contract> {
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    countdownTimer = await countdownTimerContract();
+    dataVerification = await dataVerificationContract(dataManager);
+  } else if (
+    typeof countdownTimer === 'undefined' ||
+    typeof dataVerification === 'undefined'
+  ) {
+    countdownTimer = await countdownTimerContract();
+    dataVerification = await dataVerificationContract(dataManager);
+  }
+  return await deployContract(
+    'NodeVoting',
+    dataManager,
+    countdownTimer,
+    dataVerification
+  );
 }
 
 export async function numericIntegrationContract(
-  dataVerification?: Contract
-): Promise<Contract> {
-  if (typeof dataVerification === 'undefined') {
-    dataVerification = await dataVerificationContract();
-  }
-  return await deployContract('NumericIntegration', dataVerification);
-}
-
-export async function stringIntegrationContract(
+  dataManager?: Contract,
+  authentication?: Contract,
   nodeVoting?: Contract
 ): Promise<Contract> {
-  if (typeof nodeVoting === 'undefined') {
-    nodeVoting = await nodeVotingContract();
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    authentication = await authenticationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
+  } else if (
+    typeof authentication === 'undefined' ||
+    typeof nodeVoting === 'undefined'
+  ) {
+    authentication = await authenticationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
   }
-  return await deployContract('StringIntegration', nodeVoting);
+  return await deployContract(
+    'NumericIntegration',
+    dataManager,
+    authentication,
+    nodeVoting
+  );
+}
+
+export async function stringFilteringContract(
+  dataManager?: Contract,
+  nodeVoting?: Contract
+): Promise<Contract> {
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    nodeVoting = await nodeVotingContract(dataManager);
+  } else if (typeof nodeVoting === 'undefined') {
+    nodeVoting = await nodeVotingContract(dataManager);
+  }
+  return await deployContract('StringFiltering', dataManager, nodeVoting);
 }
 
 export async function numericProcessContract(
-  authentication?: Contract,
+  dataManager?: Contract,
+  countdownTimer?: Contract,
   numericIntegration?: Contract
 ): Promise<Contract> {
-  if (typeof authentication === 'undefined') {
-    authentication = await authenticationContract();
-    numericIntegration = await numericIntegrationContract();
-  } else if (typeof numericIntegration === 'undefined') {
-    numericIntegration = await numericIntegrationContract();
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    countdownTimer = await countdownTimerContract();
+    numericIntegration = await numericIntegrationContract(
+      dataManager,
+      countdownTimer
+    );
+  } else if (
+    typeof countdownTimer === 'undefined' ||
+    typeof numericIntegration === 'undefined'
+  ) {
+    countdownTimer = await countdownTimerContract();
+    numericIntegration = await numericIntegrationContract(
+      dataManager,
+      countdownTimer
+    );
   }
   return await deployContract(
     'NumericProcess',
-    authentication,
+    dataManager,
+    countdownTimer,
     numericIntegration
   );
 }
 
 export async function stringProcessContract(
-  authentication?: Contract,
-  stringIntegration?: Contract
+  dataManager?: Contract,
+  countdownTimer?: Contract,
+  stringFiltering?: Contract
 ): Promise<Contract> {
-  if (typeof authentication === 'undefined') {
-    authentication = await authenticationContract();
-    stringIntegration = await stringIntegrationContract();
-  } else if (typeof stringIntegration === 'undefined') {
-    stringIntegration = await stringIntegrationContract();
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    countdownTimer = await countdownTimerContract();
+    stringFiltering = await stringFilteringContract(dataManager);
+  } else if (
+    typeof countdownTimer === 'undefined' ||
+    typeof stringFiltering === 'undefined'
+  ) {
+    countdownTimer = await countdownTimerContract();
+    stringFiltering = await stringFilteringContract(dataManager);
   }
   return await deployContract(
     'StringProcess',
-    authentication,
-    stringIntegration
+    dataManager,
+    countdownTimer,
+    stringFiltering
   );
 }
 
-export async function provideEventContract(
+export async function controllerContract(
+  dataManager?: Contract,
+  authentication?: Contract,
+  dataVerification?: Contract,
+  nodeVoting?: Contract,
+  numericIntegration?: Contract,
+  stringFiltering?: Contract,
   numericProcess?: Contract,
   stringProcess?: Contract
 ): Promise<Contract> {
-  if (
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    authentication = await authenticationContract(dataManager);
+    dataVerification = await dataVerificationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
+    numericIntegration = await numericIntegrationContract(
+      dataManager,
+      authentication,
+      dataVerification
+    );
+    stringFiltering = await stringFilteringContract(dataManager, nodeVoting);
+    numericProcess = await numericProcessContract(
+      dataManager,
+      numericIntegration
+    );
+    stringProcess = await stringProcessContract(dataManager, stringFiltering);
+  } else if (
+    typeof authentication === 'undefined' ||
+    typeof dataVerification === 'undefined' ||
+    typeof nodeVoting === 'undefined' ||
+    typeof numericIntegration === 'undefined' ||
+    typeof stringFiltering === 'undefined' ||
     typeof numericProcess === 'undefined' ||
     typeof stringProcess === 'undefined'
   ) {
-    const authentication = await authenticationContract();
-    numericProcess = await numericProcessContract(authentication);
-    stringProcess = await stringProcessContract(authentication);
-  }
-  return await deployContract('ProvideEvent', numericProcess, stringProcess);
-}
-
-export async function controllerContract(
-  authentication?: Contract,
-  numericProcess?: Contract,
-  stringProcess?: Contract,
-  provideEvent?: Contract
-): Promise<Contract> {
-  if (typeof authentication === 'undefined') {
-    authentication = await authenticationContract();
-    numericProcess = await numericProcessContract(authentication);
-    stringProcess = await stringProcessContract(authentication);
-    provideEvent = await provideEventContract(numericProcess, stringProcess);
-  } else if (
-    typeof numericProcess === 'undefined' ||
-    typeof stringProcess === 'undefined' ||
-    typeof provideEvent === 'undefined'
-  ) {
-    numericProcess = await numericProcessContract(authentication);
-    stringProcess = await stringProcessContract(authentication);
-    provideEvent = await provideEventContract(numericProcess, stringProcess);
+    authentication = await authenticationContract(dataManager);
+    dataVerification = await dataVerificationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
+    numericIntegration = await numericIntegrationContract(
+      dataManager,
+      authentication,
+      dataVerification
+    );
+    stringFiltering = await stringFilteringContract(dataManager, nodeVoting);
+    numericProcess = await numericProcessContract(
+      dataManager,
+      numericIntegration
+    );
+    stringProcess = await stringProcessContract(dataManager, stringFiltering);
   }
   return await deployContract(
     'Controller',
+    dataManager,
     authentication,
+    dataVerification,
+    nodeVoting,
+    numericIntegration,
+    stringFiltering,
     numericProcess,
-    stringProcess,
-    provideEvent
+    stringProcess
   );
 }
 
 export async function oracleContract(
+  dataManager?: Contract,
   numericProcess?: Contract,
   stringProcess?: Contract
 ): Promise<Contract> {
-  if (
+  if (typeof dataManager === 'undefined') {
+    dataManager = await dataManagerContract();
+    numericProcess = await numericProcessContract(dataManager);
+    stringProcess = await stringProcessContract(dataManager);
+  } else if (
     typeof numericProcess === 'undefined' ||
     typeof stringProcess === 'undefined'
   ) {
-    const authentication = await authenticationContract();
-    numericProcess = await numericProcessContract(authentication);
-    stringProcess = await stringProcessContract(authentication);
+    numericProcess = await numericProcessContract(dataManager);
+    stringProcess = await stringProcessContract(dataManager);
   }
-  return await deployContract('Oracle', numericProcess, stringProcess);
+  return await deployContract(
+    'Oracle',
+    dataManager,
+    numericProcess,
+    stringProcess
+  );
 }
 
 export async function addressRecordContract(): Promise<Contract> {

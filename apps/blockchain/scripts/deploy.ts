@@ -1,38 +1,70 @@
 import { ethers } from 'hardhat';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import * as path from 'path';
 import * as deploy from '../lib/deploy';
 import addressRecordAbi from '../artifacts/contracts/AddressRecord.sol/AddressRecord.json';
+
+const envFilePath = path.join(
+  __dirname,
+  '../../sample-dapp/frontend/.env.local'
+);
+
+const frontendEnvFilePath = path.join(
+  __dirname,
+  '../../frontend/.env.local'
+);
 
 dotenv.config();
 
 async function main() {
-  const dataVerification = await deploy.dataVerificationContract();
-  const nodeVoting = await deploy.nodeVotingContract();
-  const authentication = await deploy.authenticationContract();
-  const numericIntegration = await deploy.numericIntegrationContract(
+  const dataManager = await deploy.dataManagerContract();
+  const countdownTimer = await deploy.countdownTimerContract();
+  const authentication = await deploy.authenticationContract(dataManager);
+  const dataVerification = await deploy.dataVerificationContract(
+    dataManager,
+    countdownTimer
+  );
+  const nodeVoting = await deploy.nodeVotingContract(
+    dataManager,
+    countdownTimer,
     dataVerification
   );
-  const stringIntegration = await deploy.stringIntegrationContract(nodeVoting);
-  const numericProcess = await deploy.numericProcessContract(
+  const numericIntegration = await deploy.numericIntegrationContract(
+    dataManager,
     authentication,
+    nodeVoting
+  );
+  const stringFiltering = await deploy.stringFilteringContract(
+    dataManager,
+    nodeVoting
+  );
+  const numericProcess = await deploy.numericProcessContract(
+    dataManager,
+    countdownTimer,
     numericIntegration
   );
   const stringProcess = await deploy.stringProcessContract(
-    authentication,
-    stringIntegration
-  );
-  const provideEvent = await deploy.provideEventContract(
-    numericProcess,
-    stringProcess
+    dataManager,
+    countdownTimer,
+    stringFiltering
   );
 
   const controller = await deploy.controllerContract(
+    dataManager,
     authentication,
+    dataVerification,
+    nodeVoting,
+    numericIntegration,
+    stringFiltering,
     numericProcess,
-    stringProcess,
-    provideEvent
+    stringProcess
   );
-  const oracle = await deploy.oracleContract(numericProcess, stringProcess);
+  const oracle = await deploy.oracleContract(
+    dataManager,
+    numericProcess,
+    stringProcess
+  );
   console.log('Oracle deployed to:', oracle.address);
   console.log('Controller deployed to:', controller.address);
 
@@ -47,6 +79,22 @@ async function main() {
   );
   await addressRecord.setLatestDeployAddress(oracle.address);
   await addressRecord.getLatestDeployAddress();
+
+  const rawEnvData = dotenv.parse(fs.readFileSync(envFilePath));
+  rawEnvData.VITE_ORACLE_CONTRACT_ADDRESS = oracle.address;
+  const envData = Object.keys(rawEnvData)
+    .map((key) => `${key}=${rawEnvData[key]}`)
+    .join('\n');
+  fs.writeFileSync(envFilePath, envData);
+
+  const rawFrontendEnvData = dotenv.parse(
+    fs.readFileSync(frontendEnvFilePath)
+  );
+  rawFrontendEnvData.NEXT_PUBLIC_CONTROLLER_CONTRACT_ADDRESS = controller.address;
+  const frontendEnvData = Object.keys(rawFrontendEnvData)
+    .map((key) => `${key}=${rawFrontendEnvData[key]}`)
+    .join('\n');
+  fs.writeFileSync(frontendEnvFilePath, frontendEnvData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
