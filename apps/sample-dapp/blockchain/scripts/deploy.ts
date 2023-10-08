@@ -1,4 +1,9 @@
 import { ethers } from 'hardhat';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import * as path from 'path';
+
+const envFilePath = path.join(__dirname, '../../frontend/.env.local');
 
 async function main() {
   const CallbackContract = await ethers.getContractFactory('Callback');
@@ -7,6 +12,13 @@ async function main() {
   const AppContract = await ethers.getContractFactory('App');
   const appContract = await AppContract.deploy();
   console.log('AppContract deployed to:', appContract.address);
+
+  const rawEnvData = dotenv.parse(fs.readFileSync(envFilePath));
+  rawEnvData.VITE_CALLBACK_CONTRACT_ADDRESS = callbackContract.address;
+  const envData = Object.keys(rawEnvData)
+    .map((key) => `${key}=${rawEnvData[key]}`)
+    .join('\n');
+  fs.writeFileSync(envFilePath, envData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
