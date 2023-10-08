@@ -29,8 +29,7 @@ A blockchain oracle platform built with Hardhat and Solidity.
         npm run contract:deploy-addressRecord
         ```
 
-    2. Set the `Address Record` contract address to the `apps/blockchain/.env` file.<br><br>
-
+    2. Set the `Address Record` contract address to the `apps/blockchain/.env` file.
     3. Deploy the `Oracle` contract.
         ```bash
         npm run contract:deploy
