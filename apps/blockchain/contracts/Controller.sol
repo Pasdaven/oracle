@@ -92,4 +92,16 @@ contract Controller {
   ) external view returns (uint256) {
     return authentication.getReputationScoresByAddress(_walletAddress);
   }
+
+  function vote(
+    uint256 _questionId,
+    address _walletAddress,
+    string memory _voteValue
+  ) external returns (bool) {
+    require(
+      authentication.verifyUserIsRegistered(_walletAddress),
+      'User does not registered'
+    );
+    return nodeVoting.vote(_questionId, _walletAddress, _voteValue);
+  }
 }

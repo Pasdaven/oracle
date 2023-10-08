@@ -1,7 +1,14 @@
 import { ethers } from 'hardhat';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import * as path from 'path';
 import * as deploy from '../lib/deploy';
 import addressRecordAbi from '../artifacts/contracts/AddressRecord.sol/AddressRecord.json';
+
+const envFilePath = path.join(
+  __dirname,
+  '../../sample-dapp/frontend/.env.local'
+);
 
 dotenv.config();
 
@@ -15,12 +22,13 @@ async function main() {
   );
   const nodeVoting = await deploy.nodeVotingContract(
     dataManager,
-    countdownTimer
+    countdownTimer,
+    dataVerification
   );
   const numericIntegration = await deploy.numericIntegrationContract(
     dataManager,
     authentication,
-    dataVerification
+    nodeVoting
   );
   const stringFiltering = await deploy.stringFilteringContract(
     dataManager,
@@ -66,6 +74,13 @@ async function main() {
   );
   await addressRecord.setLatestDeployAddress(oracle.address);
   await addressRecord.getLatestDeployAddress();
+
+  const rawEnvData = dotenv.parse(fs.readFileSync(envFilePath));
+  rawEnvData.VITE_ORACLE_CONTRACT_ADDRESS = oracle.address;
+  const envData = Object.keys(rawEnvData)
+    .map((key) => `${key}=${rawEnvData[key]}`)
+    .join('\n');
+  fs.writeFileSync(envFilePath, envData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

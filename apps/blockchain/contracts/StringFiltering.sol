@@ -59,6 +59,6 @@ contract StringFiltering {
     address _callBackAddress
   ) external {
     string[] memory _answers = getRandomAnswers(_questionId, 10);
-    nodeVoting.createVoteEvent(_questionId, _callBackAddress, _answers);
+    nodeVoting.createStringVoteEvent(_questionId, _callBackAddress, _answers);
   }
 }

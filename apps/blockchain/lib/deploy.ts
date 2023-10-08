@@ -61,38 +61,49 @@ export async function dataVerificationContract(
 
 export async function nodeVotingContract(
   dataManager?: Contract,
-  countdownTimer?: Contract
+  countdownTimer?: Contract,
+  dataVerification?: Contract
 ): Promise<Contract> {
   if (typeof dataManager === 'undefined') {
     dataManager = await dataManagerContract();
     countdownTimer = await countdownTimerContract();
-  } else if (typeof countdownTimer === 'undefined') {
+    dataVerification = await dataVerificationContract(dataManager);
+  } else if (
+    typeof countdownTimer === 'undefined' ||
+    typeof dataVerification === 'undefined'
+  ) {
     countdownTimer = await countdownTimerContract();
+    dataVerification = await dataVerificationContract(dataManager);
   }
-  return await deployContract('NodeVoting', dataManager, countdownTimer);
+  return await deployContract(
+    'NodeVoting',
+    dataManager,
+    countdownTimer,
+    dataVerification
+  );
 }
 
 export async function numericIntegrationContract(
   dataManager?: Contract,
   authentication?: Contract,
-  dataVerification?: Contract
+  nodeVoting?: Contract
 ): Promise<Contract> {
   if (typeof dataManager === 'undefined') {
     dataManager = await dataManagerContract();
     authentication = await authenticationContract(dataManager);
-    dataVerification = await dataVerificationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
   } else if (
     typeof authentication === 'undefined' ||
-    typeof dataVerification === 'undefined'
+    typeof nodeVoting === 'undefined'
   ) {
     authentication = await authenticationContract(dataManager);
-    dataVerification = await dataVerificationContract(dataManager);
+    nodeVoting = await nodeVotingContract(dataManager);
   }
   return await deployContract(
     'NumericIntegration',
     dataManager,
     authentication,
-    dataVerification
+    nodeVoting
   );
 }
 
