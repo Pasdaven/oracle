@@ -1,6 +1,11 @@
 import { Contract, ethers } from 'ethers';
 import controllerAbi from '../../blockchain/artifacts/contracts/Controller.sol/Controller.json';
 
+export type Event = {
+    id: number;
+    question: string;
+};
+
 const getProvider = () => {
   const provider = new ethers.BrowserProvider(window.ethereum);
   return provider;
