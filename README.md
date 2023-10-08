@@ -22,6 +22,21 @@ A blockchain oracle platform built with Hardhat and Solidity.
     npm run dev
     ```
 
+    To deploy the project to a local blockchain, use:
+    
+    1. Deploy the `Address Record` contract first.
+        ```bash
+        npm run contract:deploy-addressRecord
+        ```
+
+    2. Set the `Address Record` contract address to the `apps/blockchain/.env` file.<br><br>
+
+    3. Deploy the `Oracle` contract.
+        ```bash
+        npm run contract:deploy
+        ```
+
+
 3. Code quality checks by running:
 
     ```bash
