@@ -13,7 +13,7 @@ const getSigner = async () => {
 
 const getContract = async () => {
   const signer = await getSigner();
-  const contractAddress = '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1';
+  const contractAddress = process.env.NEXT_PUBLIC_CONTROLLER_CONTRACT_ADDRESS as string;
   const contractABI = controllerAbi.abi;
   const contract = new Contract(contractAddress, contractABI, signer);
   return contract;
