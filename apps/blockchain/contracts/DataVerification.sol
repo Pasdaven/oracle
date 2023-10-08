@@ -20,47 +20,7 @@ contract DataVerification {
   }
 
   // Functions
-  function createVoteEvent(
-    uint256 _questionId,
-    address _callBackAddress,
-    uint256 _finalAnswer
-  ) external {
-    dataManager.setVoteEvent(_questionId, DataManager.VoteType.InProgress);
-    emit VoteEvent(_questionId, address(this));
-    // start timer for question
-    uint256 _startTime = countdownTimer.startTimer();
-    // call other service to regularly check if timer is expired, pass in questionId, callBackAddress, startTime, finalAnswer
-  }
-
-  function checkAndEndVoteEvent(
-    uint256 _questionId,
-    address _callBackAddress,
-    uint256 _startTime,
-    uint256 _finalAnswer
-  ) external {
-    DataManager.VoteType _voteType = dataManager.getVoteEvent(_questionId);
-    require(
-      _voteType == DataManager.VoteType.InProgress,
-      'vote event is not in progress'
-    );
-    if (countdownTimer.checkTimerExpired(_startTime)) {
-      dataManager.setVoteEvent(_questionId, DataManager.VoteType.Finished);
-      // call other service to end specific vote event, pass in questionId and callBackAddress
-
-      bool _voteApproved = calculateVoteResult(_questionId);
-
-      if (_voteApproved) {
-        dataManager.setFinalNumericAnswer(_questionId, _finalAnswer);
-        sendAnswerToDApp(_questionId, _callBackAddress, _finalAnswer);
-        // call RewardPunishment contract to reward or punish
-        // questionId, isOutliers = false user
-      } else {
-        // numericProcess.createQuestionEvent
-      }
-    }
-  }
-
-  function sendAnswerToDApp(
+  function sendNumericAnswerToDApp(
     uint256 _questionId,
     address _callBackAddress,
     uint256 _finalAnswer
@@ -75,15 +35,32 @@ contract DataVerification {
     emit ResponseEvent(success, data);
   }
 
-  function vote(
+  function sendStringAnswerToDApp(
     uint256 _questionId,
-    address _voter,
-    DataManager.VoteValue _voteValue
-  ) external returns (bool) {
-    return dataManager.setVote(_questionId, _voter, _voteValue);
+    address _callBackAddress,
+    string memory _answer
+  ) public payable {
+    (bool success, bytes memory data) = _callBackAddress.call{value: msg.value}(
+      abi.encodeWithSignature(
+        'receiveAnswer(uint256, string memory)',
+        _questionId,
+        _answer
+      )
+    );
+    emit ResponseEvent(success, data);
   }
 
-  function calculateVoteResult(uint256 _questionId) public view returns (bool) {
-    // TODO: implement
-  }
+  // function calculateVoteResult(uint256 _questionId) public view returns (bool) {
+  //   // TODO: implement
+  // }
+
+  // function calculateFinalAnswer(uint256 _questionId) public view {
+  //   // TODO: implement
+  //   // string memory _answer = '';
+  //   // dataManager.setFinalStringAnswer(_questionId, _answer);
+  // }
+
+  // function checkVoteApproved(uint256 _questionId) public pure returns (bool) {
+  //   // TODO: implement
+  // }
 }

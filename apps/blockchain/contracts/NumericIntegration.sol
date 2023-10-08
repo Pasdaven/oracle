@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import './DataManager.sol';
 import './Authentication.sol';
-import './DataVerification.sol';
+import './NodeVoting.sol';
 
 contract NumericIntegration {
   // Events
@@ -12,7 +12,8 @@ contract NumericIntegration {
   // Variables
   DataManager private dataManager;
   Authentication private authentication;
-  DataVerification private dataVerification;
+  NodeVoting private nodeVoting;
+
   uint256 public defaultWeight;
 
   // Constructor
@@ -23,7 +24,7 @@ contract NumericIntegration {
   ) {
     dataManager = DataManager(_dataManagerAddr);
     authentication = Authentication(_authenticationAddr);
-    dataVerification = DataVerification(_dataVerificationAddr);
+    nodeVoting = NodeVoting(_dataVerificationAddr);
     defaultWeight = 0;
   }
 
@@ -201,7 +202,7 @@ contract NumericIntegration {
   ) external {
     calculateOutliers(_questionId);
     uint256 _finalAnswer = calculateWeightedAverage(_questionId);
-    dataVerification.createVoteEvent(
+    nodeVoting.createNumericVoteEvent(
       _questionId,
       _callBackAddress,
       _finalAnswer
