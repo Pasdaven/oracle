@@ -22,7 +22,7 @@ const getContract = async () => {
 export const getWalletBalance = async (walletAddress: string) => {
   try {
     const signer = await getSigner();
-    const balanceWei: any = await signer.provider.getBalance(walletAddress);
+    const balanceWei: bigint = await signer.provider.getBalance(walletAddress);
 
     const balanceEther = parseFloat(ethers.formatEther(balanceWei)).toFixed(4);
 
