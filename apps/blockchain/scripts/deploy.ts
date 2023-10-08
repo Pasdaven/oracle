@@ -10,6 +10,11 @@ const envFilePath = path.join(
   '../../sample-dapp/frontend/.env.local'
 );
 
+const frontendEnvFilePath = path.join(
+  __dirname,
+  '../../frontend/.env.local'
+);
+
 dotenv.config();
 
 async function main() {
@@ -81,6 +86,15 @@ async function main() {
     .map((key) => `${key}=${rawEnvData[key]}`)
     .join('\n');
   fs.writeFileSync(envFilePath, envData);
+
+  const rawFrontendEnvData = dotenv.parse(
+    fs.readFileSync(frontendEnvFilePath)
+  );
+  rawFrontendEnvData.NEXT_PUBLIC_CONTROLLER_CONTRACT_ADDRESS = controller.address;
+  const frontendEnvData = Object.keys(rawFrontendEnvData)
+    .map((key) => `${key}=${rawFrontendEnvData[key]}`)
+    .join('\n');
+  fs.writeFileSync(frontendEnvFilePath, frontendEnvData);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
