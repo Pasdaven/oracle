@@ -19,6 +19,20 @@ const getContract = async () => {
   return contract;
 };
 
+export const getWalletBalance = async (walletAddress: string) => {
+  try {
+    const signer = await getSigner();
+    const balanceWei: bigint = await signer.provider.getBalance(walletAddress);
+
+    const balanceEther = parseFloat(ethers.formatEther(balanceWei)).toFixed(4);
+
+    return balanceEther;
+  } catch (error) {
+    console.error('Error fetching wallet balance:', error);
+    return null;
+  }
+};
+
 export const authenticate = async (walletAddress: string) => {
   const contract = await getContract();
   const request = await contract.auth(walletAddress, {
