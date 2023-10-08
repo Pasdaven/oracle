@@ -9,9 +9,6 @@ async function main() {
   const CallbackContract = await ethers.getContractFactory('Callback');
   const callbackContract = await CallbackContract.deploy();
   console.log('CallbackContract deployed to:', callbackContract.address);
-  const AppContract = await ethers.getContractFactory('App');
-  const appContract = await AppContract.deploy();
-  console.log('AppContract deployed to:', appContract.address);
 
   const rawEnvData = dotenv.parse(fs.readFileSync(envFilePath));
   rawEnvData.VITE_CALLBACK_CONTRACT_ADDRESS = callbackContract.address;
