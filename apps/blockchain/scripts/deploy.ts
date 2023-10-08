@@ -15,12 +15,13 @@ async function main() {
   );
   const nodeVoting = await deploy.nodeVotingContract(
     dataManager,
-    countdownTimer
+    countdownTimer,
+    dataVerification
   );
   const numericIntegration = await deploy.numericIntegrationContract(
     dataManager,
     authentication,
-    dataVerification
+    nodeVoting
   );
   const stringFiltering = await deploy.stringFilteringContract(
     dataManager,
